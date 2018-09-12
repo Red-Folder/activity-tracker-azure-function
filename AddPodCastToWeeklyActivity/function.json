@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "podCast",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "podcast-to-be-added-to-weekly-activity",
+      "connection": "AzureWebJobsStorage"
+    }
+  ],
+  "disabled": false
+}

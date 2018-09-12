@@ -1,0 +1,26 @@
+{
+  "bindings": [
+    {
+      "name": "newPodCast",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "new-podcast",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "queue",
+      "name": "toBeTweeted",
+      "queueName": "podcast-to-be-tweeted",
+      "connection": "AzureWebJobsStorage",
+      "direction": "out"
+    },
+    {
+      "type": "queue",
+      "name": "toBeAddedToWeeklyActivity",
+      "queueName": "podcast-to-be-added-to-weekly-activity",
+      "connection": "AzureWebJobsStorage",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}

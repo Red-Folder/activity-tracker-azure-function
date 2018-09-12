@@ -1,0 +1,26 @@
+{
+  "bindings": [
+    {
+      "name": "source",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "beyond-pod-raw-data",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "table",
+      "name": "destination",
+      "tableName": "PodCasts",
+      "connection": "AzureWebJobsStorage",
+      "direction": "in"
+    },
+    {
+      "type": "queue",
+      "name": "podcastReadyToGo",
+      "queueName": "new-podcast",
+      "connection": "AzureWebJobsStorage",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}

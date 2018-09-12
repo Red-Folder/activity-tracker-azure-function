@@ -1,0 +1,19 @@
+{
+  "bindings": [
+    {
+      "name": "source",
+      "type": "blobTrigger",
+      "direction": "inout",
+      "path": "beyond-pod-data/{name}",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "table",
+      "name": "destination",
+      "tableName": "PodCasts",
+      "connection": "AzureWebJobsStorage",
+      "direction": "in"
+    }
+  ],
+  "disabled": true
+}
