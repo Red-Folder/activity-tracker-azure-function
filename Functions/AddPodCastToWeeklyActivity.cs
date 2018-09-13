@@ -49,8 +49,8 @@ namespace Red_Folder.ActivityTracker.Functions
 
             var json = await blob.DownloadTextAsync();
             var week = json.Length == 0 ?
-                            new WeekActivity(year, weekNumber) :
-                            JsonConvert.DeserializeObject<WeekActivity>(json);
+                            new Models.WeekActivity(year, weekNumber) :
+                            JsonConvert.DeserializeObject<Models.WeekActivity>(json);
 
             week.AddPodCast(podCast);
 

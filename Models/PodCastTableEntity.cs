@@ -35,8 +35,6 @@ namespace Red_Folder.ActivityTracker.Models
 
         public PodCast ToPodCast()
         {
-            throw new NotImplementedException("TODO");
-
             return new PodCast
             {
                 Created = this.Created,
@@ -44,8 +42,16 @@ namespace Red_Folder.ActivityTracker.Models
                 FeedName = this.FeedName,
                 FeedUrl = this.FeedUrl,
                 EpisodeName = this.EpisodeName,
-                EpisodeUrl = this.EpisodeUrl
-
+                EpisodeUrl = this.EpisodeUrl,
+                EpisodeFile = this.EpisodeFile,
+                EpisodePostUrl = this.EpisodePostUrl,
+                EpisodeMime = this.EpisodeMime,
+                EpisodeSummary = this.EpisodeSummary,
+                EpisodeDuration = this.EpisodeDuration,
+                EpisodePosition = this.EpisodePosition,
+                Artist = this.Artist,
+                Album = this.Album,
+                Track = this.Track
             };
         }
     }
