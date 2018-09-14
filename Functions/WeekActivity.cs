@@ -12,7 +12,7 @@ namespace Red_Folder.ActivityTracker.Functions
     public class WeekActivity
     {
         [FunctionName("WeeklyActivity")]
-        public static async System.Threading.Tasks.Task<IActionResult> RunAsync(
+        public static IActionResult RunAsync(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "weeklyactivity/{year}/{weekNumber}")]HttpRequest req,
             int? year, 
             int? weekNumber,
