@@ -33,6 +33,11 @@ namespace Red_Folder.ActivityTracker.Functions
             await proxy.PopulateAsync(togglApiKey, togglWorkspaceId, start, end);
 
             var skillActivity = proxy.GetSkillsActivity();
+
+            foreach (var skill in skillActivity.Skills)
+            {
+                log.LogInformation($"{skill.Name}: {skill.TotalDuration}");
+            }
         }
 
     }
