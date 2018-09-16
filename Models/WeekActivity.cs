@@ -35,6 +35,9 @@ namespace Red_Folder.ActivityTracker.Models
         [JsonProperty("podCasts")]
         public PodCastActivity PodCasts { get; set; }
 
+        [JsonProperty("skills")]
+        public SkillsActivity Skills { get; set; }
+
 
         public void AddPodCast(PodCast podCast)
         {

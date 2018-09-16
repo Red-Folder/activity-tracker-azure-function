@@ -1,11 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Red_Folder.ActivityTracker.Models.Toggl;
+using Red_Folder.ActivityTracker.Services;
 
 namespace Red_Folder.ActivityTracker.Functions
 {
@@ -20,28 +25,15 @@ namespace Red_Folder.ActivityTracker.Functions
             var togglApiKey = Environment.GetEnvironmentVariable("TogglApiKey", EnvironmentVariableTarget.Process);
             var togglWorkspaceId = Environment.GetEnvironmentVariable("TogglWorkspaceId", EnvironmentVariableTarget.Process);
 
-            using (var client = new HttpClient())
-            {
-                var credentials = Encoding.ASCII.GetBytes($"{togglApiKey}:api_token");
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentials));
+            var start = new DateTime(2018, 09, 10);
+            var end = new DateTime(2018, 09, 16);
 
-                var url = BuildUrl(togglWorkspaceId, new DateTime(2018, 09, 08), new DateTime(2018, 09, 15));
-                var result = await client.GetAsync(url);
-                string resultContent = await result.Content.ReadAsStringAsync();
-                log.LogInformation(resultContent);
-            }
+            var proxy = new TogglProxy(log);
+
+            await proxy.PopulateAsync(togglApiKey, togglWorkspaceId, start, end);
+
+            var skillActivity = proxy.GetSkillsActivity();
         }
 
-        private static string BuildUrl(string workspaceId, DateTime from, DateTime to) 
-        {
-            var builder = new StringBuilder();
-            builder.Append("https://toggl.com/reports/api/v2/details?");
-            builder.Append($"workspace_id={workspaceId}");
-            builder.Append($"&since={from.ToString("yyyy-MM-dd")}");
-            builder.Append($"&until={to.ToString("yyyy-MM-dd")}");
-            builder.Append("&user_agent=red-folder.com");
-
-            return builder.ToString();
-        }
     }
 }
