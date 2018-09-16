@@ -85,8 +85,7 @@ namespace Red_Folder.ActivityTracker.Services
                 var detailedReport = JsonConvert.DeserializeObject<DetailedReport>(json);
                 timeEntries.AddRange(detailedReport.TimeEntries);
 
-                _log.LogInformation($"Page: {detailedReport.Pages}, TotalCount: {detailedReport.TotalCount}, PerPage: {detailedReport.PerPage}");
-                if (detailedReport.Pages > pageNo)
+                if ((pageNo * detailedReport.PerPage) < detailedReport.TotalCount)
                 {
                     timeEntries.AddRange(await GetPageAsync(client, url, pageNo+1));
                 }

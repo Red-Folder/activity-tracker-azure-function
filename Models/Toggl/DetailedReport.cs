@@ -13,15 +13,6 @@ namespace Red_Folder.ActivityTracker.Models.Toggl
         [JsonProperty("per_page")]
         public long PerPage { get; set; }
 
-        [JsonIgnore]
-        public int Pages
-        {
-            get
-            {
-                return (int)(TotalCount / PerPage);
-            }
-        }
-
         [JsonProperty("data")]
         public TimeEntry[] TimeEntries { get; set; }
     }
