@@ -37,7 +37,7 @@ namespace Red_Folder.ActivityTracker.Services
                             .Select(group => new Skill
                             {
                                 Name = group.Key.Replace("Skill - ", ""),
-                                TotalDuration = group.Sum(x => x.Duration)
+                                TotalDuration = group.Sum(x => (x.Duration/ 1000))
                             });
 
             result.Skills = skills.ToList();
@@ -84,9 +84,11 @@ namespace Red_Folder.ActivityTracker.Services
                 string json = await result.Content.ReadAsStringAsync();
                 var detailedReport = JsonConvert.DeserializeObject<DetailedReport>(json);
                 timeEntries.AddRange(detailedReport.TimeEntries);
+
+                _log.LogInformation($"Page: {detailedReport.Pages}, TotalCount: {detailedReport.TotalCount}, PerPage: {detailedReport.PerPage}");
                 if (detailedReport.Pages > pageNo)
                 {
-                    timeEntries.AddRange(await GetPageAsync(client, url, pageNo++));
+                    timeEntries.AddRange(await GetPageAsync(client, url, pageNo+1));
                 }
             }
             else
