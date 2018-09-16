@@ -77,7 +77,7 @@ namespace Red_Folder.ActivityTracker.Services
             var timeEntries = new List<TimeEntry>();
 
             _log.LogInformation($"Retrieving page no {pageNo}");
-            var result = await client.GetAsync($"url&page={pageNo}");
+            var result = await client.GetAsync($"{url}&page={pageNo}");
 
             if (result.IsSuccessStatusCode)
             {
@@ -91,6 +91,7 @@ namespace Red_Folder.ActivityTracker.Services
             }
             else
             {
+                _log.LogError($"Failed to retrieve data, status code: {result.StatusCode}");
                 throw new ApplicationException("Error occurred while trying to retrieve data");
             }
 
