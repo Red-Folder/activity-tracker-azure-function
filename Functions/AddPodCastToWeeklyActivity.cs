@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
+using Red_Folder.ActivityTracker.Services;
 
 namespace Red_Folder.ActivityTracker.Functions
 {
@@ -38,24 +39,17 @@ namespace Red_Folder.ActivityTracker.Functions
             };
 
             var blob = await binder.BindAsync<CloudBlockBlob>(attributes);
-            var exists = await blob.ExistsAsync();
-            if (!exists)
+
+            using (var locker = new CloudBlockBlobLocker<Models.WeekActivity>(blob))
             {
-                log.LogInformation("Blob not exist - create temporary");
-                await blob.UploadTextAsync("");
+                var week = locker.IsNew ?
+                                new Models.WeekActivity(year, weekNumber) :
+                                await locker.Download();
+
+                week.AddPodCast(podCast);
+
+                await locker.Upload(week);
             }
-            string lease = await blob.AcquireLeaseAsync(TimeSpan.FromSeconds(15), null);
-            var accessCondition = AccessCondition.GenerateLeaseCondition(lease);
-
-            var json = await blob.DownloadTextAsync();
-            var week = json.Length == 0 ?
-                            new Models.WeekActivity(year, weekNumber) :
-                            JsonConvert.DeserializeObject<Models.WeekActivity>(json);
-
-            week.AddPodCast(podCast);
-
-            await blob.UploadTextAsync(JsonConvert.SerializeObject(week), null, accessCondition, null, null);
-            await blob.ReleaseLeaseAsync(accessCondition);
         }
     }
 }
