@@ -17,10 +17,10 @@ namespace Red_Folder.ActivityTracker.Functions
         {
             var podCastAge = (DateTime.Now - newPodCast.Created).TotalHours;
 
-            //if (podCastAge < 3)
-            //{
-            //    toBeTweeted.Add(newPodCast);
-            //}
+            if (podCastAge < 3)
+            {
+                toBeTweeted.Add(newPodCast);
+            }
 
             toBeAddedToWeeklyActivity.Add(newPodCast);
         }
