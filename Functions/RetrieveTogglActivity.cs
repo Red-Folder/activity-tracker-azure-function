@@ -10,6 +10,7 @@ using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
+using Red_Folder.ActivityTracker.Models;
 using Red_Folder.ActivityTracker.Models.Toggl;
 using Red_Folder.ActivityTracker.Services;
 
@@ -18,38 +19,29 @@ namespace Red_Folder.ActivityTracker.Functions
     public static class RetrieveTogglActivity
     {
         [FunctionName("RetrieveTogglActivity")]
-//        public static async System.Threading.Tasks.Task RunAsync([TimerTrigger("0 0 10 * * 1")]TimerInfo myTimer, ILogger log)
         public static async System.Threading.Tasks.Task RunAsync(
-                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]HttpRequest req,
-                Binder binder,
-                ILogger log)
+            [TimerTrigger("0 0 10 * * 1")]TimerInfo myTimer,
+            Binder binder,
+            ILogger log)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
             var togglApiKey = Environment.GetEnvironmentVariable("TogglApiKey", EnvironmentVariableTarget.Process);
             var togglWorkspaceId = Environment.GetEnvironmentVariable("TogglWorkspaceId", EnvironmentVariableTarget.Process);
 
-            var start = new DateTime(2018, 09, 10);
-            var end = new DateTime(2018, 09, 16);
+            var week = Week.LastWeek();
 
             var proxy = new TogglProxy(log);
 
-            await proxy.PopulateAsync(togglApiKey, togglWorkspaceId, start, end);
+            log.LogInformation($"Retrieving data for ${week.Start.ToShortDateString()} to ${week.End.ToShortDateString()}");
+            await proxy.PopulateAsync(togglApiKey, togglWorkspaceId, week.Start, week.End);
 
+            log.LogInformation($"Get the Skills activitys");
             var skillActivity = proxy.GetSkillsActivity();
 
-            /*
-            foreach (var skill in skillActivity.Skills)
-            {
-                log.LogInformation($"{skill.Name}: {skill.TotalDuration}");
-            }
-            */
+            var blobName = $"activity-weekly/{week.Year.ToString("0000")}/{week.WeekNumber.ToString("00")}.json";
 
-            int year = 2018;
-            int weekNumber = 37;
-
-            var blobName = $"activity-weekly/{year.ToString("0000")}/{weekNumber.ToString("00")}.json";
-
+            log.LogInformation($"Preparing to update ${blobName}");
             var attributes = new Attribute[]
             {
                 new BlobAttribute(blobName),
@@ -58,16 +50,20 @@ namespace Red_Folder.ActivityTracker.Functions
 
             var blob = await binder.BindAsync<CloudBlockBlob>(attributes);
 
+            log.LogInformation("Locking blob");
             using (var locker = new CloudBlockBlobLocker<Models.WeekActivity>(blob))
             {
-                var week = locker.IsNew ?
-                                new Models.WeekActivity(year, weekNumber) :
+                var activity = locker.IsNew ?
+                                new Models.WeekActivity(week.Year, week.WeekNumber) :
                                 await locker.Download();
 
-                week.Skills = skillActivity;
+                activity.Skills = skillActivity;
 
-                await locker.Upload(week);
+                log.LogInformation("Uploading blob");
+                await locker.Upload(activity);
             }
+
+            log.LogInformation("Function complete");
         }
 
     }
