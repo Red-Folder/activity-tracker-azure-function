@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Red_Folder.ActivityTracker.Models.Pluralsight
 {
-    public class Course
+    public class BaseCourse
     {
         [JsonProperty("courseId")]
         public string CourseId { get; set; }
@@ -19,9 +19,5 @@ namespace Red_Folder.ActivityTracker.Models.Pluralsight
         public string Level;
         [JsonProperty("duration")]
         public TimeSpan Duration;
-        [JsonProperty("lastViewedTimestamp")]
-        public DateTime LastViewedTimestamp { get; set; }
-        [JsonProperty("percentageComplete")]
-        public float PercentageComplete { get; set; }
     }
 }
