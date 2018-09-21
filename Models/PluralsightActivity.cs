@@ -7,7 +7,7 @@ namespace Red_Folder.ActivityTracker.Models
 {
     public class PluralsightActivity
     {
-        [JsonProperty("pluralsight")]
+        [JsonProperty("courses")]
         public List<Course> Courses;
     }
 }

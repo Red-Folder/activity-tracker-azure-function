@@ -64,15 +64,25 @@ namespace Red_Folder.ActivityTracker.Services
         {
             var courses = new List<Models.Pluralsight.Course>();
 
-            _log.LogInformation($"Retrieving data");
+            _log.LogInformation($"Retrieving data from {url}");
             var result = await client.GetAsync($"{url}");
 
             if (result.IsSuccessStatusCode)
             {
                 string json = await result.Content.ReadAsStringAsync();
-                var fullResponse = JsonConvert.DeserializeObject<Models.Pluralsight.Course[]>(json);
+                _log.LogInformation($"Received Json: {json}");
+                var fullResponse = JsonConvert.DeserializeObject<List<Models.Pluralsight.Course>>(json);
+
+                _log.LogInformation($"{fullResponse.Count()} records in fullResponse");
+
+                foreach (var course in fullResponse)
+                {
+                    _log.LogInformation($"{course.Title} - {course.LastViewedTimestamp.ToShortDateString()}");
+                }
 
                 courses = fullResponse.Where(course => course.LastViewedTimestamp >= start && course.LastViewedTimestamp <= end).ToList();
+
+                _log.LogInformation($"{courses.Count()} records in courses");
             }
             else
             {
