@@ -64,7 +64,7 @@ namespace Red_Folder.ActivityTracker.Services
                 var credentials = Encoding.ASCII.GetBytes($"{togglApiKey}:api_token");
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentials));
 
-                var url = BuildUrl(togglWorkspaceId, new DateTime(2018, 09, 08), new DateTime(2018, 09, 15));
+                var url = BuildUrl(togglWorkspaceId, start, end);
 
                 var timeEntries = await GetPageAsync(client, url, 1);
 
