@@ -11,5 +11,10 @@ namespace Red_Folder.ActivityTracker.Models.Pluralsight
         public DateTime LastViewedTimestamp { get; set; }
         [JsonProperty("percentageComplete")]
         public float PercentageComplete { get; set; }
+
+        public override bool IsWithinRange(DateTime start, DateTime end)
+        {
+            return LastViewedTimestamp >= start && LastViewedTimestamp <= end;
+        }
     }
 }

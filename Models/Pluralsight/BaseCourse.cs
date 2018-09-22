@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Red_Folder.ActivityTracker.Models.Pluralsight
 {
-    public class BaseCourse
+    public abstract class BaseCourse
     {
         [JsonProperty("courseId")]
         public string CourseId { get; set; }
@@ -19,5 +19,7 @@ namespace Red_Folder.ActivityTracker.Models.Pluralsight
         public string Level;
         [JsonProperty("duration")]
         public TimeSpan Duration;
+
+        public abstract bool IsWithinRange(DateTime start, DateTime end);
     }
 }

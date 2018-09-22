@@ -9,5 +9,10 @@ namespace Red_Folder.ActivityTracker.Models.Pluralsight
     {
         [JsonProperty("timeCompleted")]
         public DateTime TimeCompleted { get; set; }
+
+        public override bool IsWithinRange(DateTime start, DateTime end)
+        {
+            return TimeCompleted >= start && TimeCompleted <= end;
+        }
     }
 }

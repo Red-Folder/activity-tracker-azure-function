@@ -24,37 +24,39 @@ namespace Red_Folder.ActivityTracker.Services
 
         public async Task PopulateAsync(string pluralSightId, DateTime start, DateTime end)
         {
-            _currentlyLearning = await GetActivityDataAsync<CurrentlyLearningCourse>(pluralSightId, start, end);
+            _currentlyLearning = await GetActivityDataAsync<CurrentlyLearningCourse>("currentlylearning", pluralSightId, start, end);
+            _completed = await GetActivityDataAsync<CompletedCourse>("completedcourses", pluralSightId, start, end);
         }
 
         public PluralsightActivity GetPluralsightActivity()
         {
             var result = new PluralsightActivity();
 
-            result.Courses = _currentlyLearning.Select(raw => new Models.Course
+            var combinedCourses = new List<Course>();
+            combinedCourses.AddRange(_completed.Select(raw => new Course
+            {
+                Name = raw.Title,
+                Url = $"https://www.pluralsight.com/courses/{raw.CourseId}",
+                PercentageComplete = 100
+            }).ToList());
+            combinedCourses.AddRange(_currentlyLearning.Select(raw => new Course
             {
                 Name = raw.Title,
                 Url = $"https://www.pluralsight.com/courses/{raw.CourseId}",
                 PercentageComplete = (int)raw.PercentageComplete
-            }).ToList();
+            }).ToList());
 
-            return result;
+            return new PluralsightActivity
+            {
+                Courses = combinedCourses
+            };
         }
 
-        private string BuildUrl(string pluralsightId)
-        {
-            var builder = new StringBuilder();
-            builder.Append("https://app.pluralsight.com/profile/data/currentlylearning/");
-            builder.Append(pluralsightId);
-
-            return builder.ToString();
-        }
-
-        private async Task<IList<T>> GetActivityDataAsync<T>(string pluralsightId, DateTime start, DateTime end) where T : BaseCourse
+        private async Task<IList<T>> GetActivityDataAsync<T>(string apiMethod, string pluralsightId, DateTime start, DateTime end) where T : BaseCourse
         {
             using (var client = new HttpClient())
             {
-                var url = BuildUrl(pluralsightId);
+                var url = $"https://app.pluralsight.com/profile/data/{apiMethod}/{pluralsightId}";
 
                 var courses = await GetAsync<T>(client, url, start, end);
 
@@ -79,7 +81,7 @@ namespace Red_Folder.ActivityTracker.Services
 
                 if (typeof(T) == typeof(CurrentlyLearningCourse))
                 {
-                    courses = fullResponse.Where(course => ((CurrentlyLearningCourse)course).LastViewedTimestamp >= start && course.LastViewedTimestamp <= end).ToList();
+                    courses = fullResponse.Where(course => course.IsWithinRange(start, end)).ToList();
                 }
 
                 _log.LogInformation($"{courses.Count()} records in courses");
