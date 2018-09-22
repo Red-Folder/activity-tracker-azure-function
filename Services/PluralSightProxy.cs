@@ -74,16 +74,10 @@ namespace Red_Folder.ActivityTracker.Services
             if (result.IsSuccessStatusCode)
             {
                 string json = await result.Content.ReadAsStringAsync();
-                _log.LogInformation($"Received Json: {json}");
                 var fullResponse = JsonConvert.DeserializeObject<List<T>>(json);
-
                 _log.LogInformation($"{fullResponse.Count()} records in fullResponse");
 
-                if (typeof(T) == typeof(CurrentlyLearningCourse))
-                {
-                    courses = fullResponse.Where(course => course.IsWithinRange(start, end)).ToList();
-                }
-
+                courses = fullResponse.Where(course => course.IsWithinRange(start, end)).ToList();
                 _log.LogInformation($"{courses.Count()} records in courses");
             }
             else
