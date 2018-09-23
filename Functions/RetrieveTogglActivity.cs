@@ -36,8 +36,11 @@ namespace Red_Folder.ActivityTracker.Functions
             log.LogInformation($"Retrieving data for ${week.Start.ToShortDateString()} to ${week.End.ToShortDateString()}");
             await proxy.PopulateAsync(togglApiKey, togglWorkspaceId, week.Start, week.End);
 
-            log.LogInformation($"Get the Skills activitys");
+            log.LogInformation($"Get the Skills activities");
             var skillActivity = proxy.GetSkillsActivity();
+
+            log.LogInformation($"Get the Client split");
+            var clientActivity = proxy.GetClientActivity();
 
             var blobName = $"activity-weekly/{week.Year.ToString("0000")}/{week.WeekNumber.ToString("00")}.json";
 
@@ -58,6 +61,7 @@ namespace Red_Folder.ActivityTracker.Functions
                                 await locker.Download();
 
                 activity.Skills = skillActivity;
+                activity.Clients = clientActivity;
 
                 log.LogInformation("Uploading blob");
                 await locker.Upload(activity);
