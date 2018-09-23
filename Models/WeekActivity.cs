@@ -55,6 +55,9 @@ namespace Red_Folder.ActivityTracker.Models
         [JsonProperty("pluralsight")]
         public PluralsightActivity Pluralsight { get; set; }
 
+        [JsonProperty("clients")]
+        public ClientActivity Clients { get; set; }
+
         public void AddPodCast(PodCast podCast)
         {
             if (PodCasts == null) PodCasts = new PodCastActivity();

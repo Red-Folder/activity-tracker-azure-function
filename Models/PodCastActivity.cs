@@ -73,6 +73,7 @@ namespace Red_Folder.ActivityTracker.Models
 
                 case "More or Less: Behind the Stats":
                 case "Friday Night Comedy from BBC Radio 4":
+                case "In Our Time: Science":
                     return "Fun";
 
                 case "Engineering Culture by InfoQ":

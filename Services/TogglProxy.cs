@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Red_Folder.ActivityTracker.Models;
 using Red_Folder.ActivityTracker.Models.Toggl;
+using Red_Folder.ActivityTracker.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,27 @@ namespace Red_Folder.ActivityTracker.Services
                             });
 
             result.Skills = skills.ToList();
+
+            return result;
+        }
+
+        public ClientActivity GetClientActivity()
+        {
+            var result = new ClientActivity();
+
+            var obscrurer = new ClientObscurer();
+            var clients = _timeEntries
+                                .Where(entity => !String.IsNullOrEmpty(entity.Client))
+                                .Select(entity => new {
+                                    Client = obscrurer.Obscure(entity.Client),
+                                    Duration = entity.Duration
+                                })
+                                .GroupBy(entry => entry.Client)
+                                .Select(group => new Client
+                                {
+                                    Name = group.Key,
+                                    TotalDuration = group.Sum(x => x.Duration / 1000)
+                                });
 
             return result;
         }
