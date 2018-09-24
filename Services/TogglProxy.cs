@@ -50,11 +50,11 @@ namespace Red_Folder.ActivityTracker.Services
         {
             var result = new ClientActivity();
 
-            var obscrurer = new ClientObscurer();
+            var obscurer = new ClientObscurer();
             var clients = _timeEntries
                                 .Where(entity => !String.IsNullOrEmpty(entity.Client))
                                 .Select(entity => new {
-                                    Client = obscrurer.Obscure(entity.Client),
+                                    Client = obscurer.Obscure(entity.Client),
                                     Duration = entity.Duration
                                 })
                                 .GroupBy(entry => entry.Client)
@@ -64,6 +64,7 @@ namespace Red_Folder.ActivityTracker.Services
                                     TotalDuration = group.Sum(x => x.Duration / 1000)
                                 });
 
+            result.Clients = clients.ToList();
             return result;
         }
 

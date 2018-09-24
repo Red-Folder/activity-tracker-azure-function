@@ -13,5 +13,7 @@ namespace Red_Folder.ActivityTracker.Models
         public string Url { get; set; }
         [JsonProperty("percentageComplete")]
         public int PercentageComplete { get; set; }
+        [JsonProperty("courseImageUrl")]
+        public string CourseImageUrl { get; set; }
     }
 }

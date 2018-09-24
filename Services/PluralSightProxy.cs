@@ -16,6 +16,7 @@ namespace Red_Folder.ActivityTracker.Services
         private ILogger _log;
         private IList<CurrentlyLearningCourse> _currentlyLearning;
         private IList<CompletedCourse> _completed;
+        private IList<Contents> _courseContent = new List<Contents>();
 
         public PluralsightProxy(ILogger log)
         {
@@ -26,6 +27,24 @@ namespace Red_Folder.ActivityTracker.Services
         {
             _currentlyLearning = await GetActivityDataAsync<CurrentlyLearningCourse>("currentlylearning", pluralSightId, start, end);
             _completed = await GetActivityDataAsync<CompletedCourse>("completedcourses", pluralSightId, start, end);
+
+        }
+
+        private async Task PopulateCourseContents<T>(HttpClient client, IList<T> courses) where T: BaseCourse
+        {
+            foreach (var course in courses)
+            {
+                if (!_courseContent.Any(x => x.Id == course.CourseId))
+                {
+                    try
+                    {
+                        _courseContent.Add(await GetCourseContents(client, course.CourseId));
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
         }
 
         public PluralsightActivity GetPluralsightActivity()
@@ -37,13 +56,15 @@ namespace Red_Folder.ActivityTracker.Services
             {
                 Name = raw.Title,
                 Url = $"https://www.pluralsight.com/courses/{raw.CourseId}",
-                PercentageComplete = 100
+                PercentageComplete = 100,
+                CourseImageUrl = _courseContent.Where(content => content.Id == raw.CourseId).Select(content => content.CourseImageUrl).FirstOrDefault()
             }).ToList());
             combinedCourses.AddRange(_currentlyLearning.Select(raw => new Course
             {
                 Name = raw.Title,
                 Url = $"https://www.pluralsight.com/courses/{raw.CourseId}",
-                PercentageComplete = (int)raw.PercentageComplete
+                PercentageComplete = (int)raw.PercentageComplete,
+                CourseImageUrl = _courseContent.Where(content => content.Id == raw.CourseId).Select(content => content.CourseImageUrl).FirstOrDefault()
             }).ToList());
 
             return new PluralsightActivity
@@ -59,6 +80,8 @@ namespace Red_Folder.ActivityTracker.Services
                 var url = $"https://app.pluralsight.com/profile/data/{apiMethod}/{pluralsightId}";
 
                 var courses = await GetAsync<T>(client, url, start, end);
+
+                await PopulateCourseContents<T>(client, courses);
 
                 return courses;
             }
@@ -89,5 +112,24 @@ namespace Red_Folder.ActivityTracker.Services
             return courses;
         }
 
+        private async Task<Contents> GetCourseContents(HttpClient client, string id)
+        {
+            var url = $"https://app.pluralsight.com/learner/content/courses/{id}";
+            _log.LogInformation($"Retrieving data from {url}");
+            var result = await client.GetAsync($"{url}");
+
+            if (result.IsSuccessStatusCode)
+            {
+                string json = await result.Content.ReadAsStringAsync();
+                var contents = JsonConvert.DeserializeObject<Contents>(json);
+
+                return contents;
+            }
+            else
+            {
+                _log.LogError($"Failed to retrieve data, status code: {result.StatusCode}");
+                throw new ApplicationException("Error occurred while trying to retrieve data");
+            }
+        }
     }
 }
