@@ -18,8 +18,17 @@ namespace Red_Folder.ActivityTracker.Functions
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
             var pluralsightId = Environment.GetEnvironmentVariable("PluralsightId", EnvironmentVariableTarget.Process);
+            var overrideWeek = Environment.GetEnvironmentVariable("OverrideWeek", EnvironmentVariableTarget.Process);
 
             var week = Week.LastWeek();
+            if (!String.IsNullOrEmpty(overrideWeek))
+            {
+                log.LogInformation($"Override set for week: {overrideWeek}");
+                var weekNumber = int.Parse(overrideWeek.Split(':')[0]);
+                var year = int.Parse(overrideWeek.Split(':')[1]);
+
+                week = Week.FromYearAndWeekNumber(year, weekNumber);
+            }
 
             var proxy = new PluralsightProxy(log);
 
