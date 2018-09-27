@@ -30,7 +30,7 @@ namespace Red_Folder.ActivityTracker.Services
 
         }
 
-        private async Task PopulateCourseContents<T>(HttpClient client, IList<T> courses) where T: BaseCourse
+        private async Task PopulateCourseContents<T>(HttpClient client, IList<T> courses) where T : BaseCourse
         {
             foreach (var course in courses)
             {
@@ -52,19 +52,33 @@ namespace Red_Folder.ActivityTracker.Services
             var result = new PluralsightActivity();
 
             var combinedCourses = new List<Course>();
-            combinedCourses.AddRange(_completed.Select(raw => new Course
+            combinedCourses.AddRange(_completed.Select(raw =>
             {
-                Name = raw.Title,
-                Url = $"https://www.pluralsight.com/courses/{raw.CourseId}",
-                PercentageComplete = 100,
-                CourseImageUrl = _courseContent.Where(content => content.Id == raw.CourseId).Select(content => content.CourseImageUrl).FirstOrDefault()
+                var content = _courseContent.Where(x => x.Id == raw.CourseId).FirstOrDefault();
+                return new Course
+                {
+                    CourseId = raw.CourseId,
+                    Title = raw.Title,
+                    Url = $"https://www.pluralsight.com/courses/{raw.CourseId}",
+                    PercentageComplete = 100,
+                    CourseImageUrl = content == null ? null : content.CourseImageUrl,
+                    ShortDescription = content == null ? "" : content.ShortDescription,
+                    Description = content == null ? "" : content.Description
+                };
             }).ToList());
-            combinedCourses.AddRange(_currentlyLearning.Select(raw => new Course
+            combinedCourses.AddRange(_currentlyLearning.Select(raw =>
             {
-                Name = raw.Title,
-                Url = $"https://www.pluralsight.com/courses/{raw.CourseId}",
-                PercentageComplete = (int)raw.PercentageComplete,
-                CourseImageUrl = _courseContent.Where(content => content.Id == raw.CourseId).Select(content => content.CourseImageUrl).FirstOrDefault()
+                var content = _courseContent.Where(x => x.Id == raw.CourseId).FirstOrDefault();
+                return new Course
+                {
+                    CourseId = raw.CourseId,
+                    Title = raw.Title,
+                    Url = $"https://www.pluralsight.com/courses/{raw.CourseId}",
+                    PercentageComplete = (int)raw.PercentageComplete,
+                    CourseImageUrl = content == null ? null : content.CourseImageUrl,
+                    ShortDescription = content == null ? "" : content.ShortDescription,
+                    Description = content == null ? "" : content.Description
+                };
             }).ToList());
 
             return new PluralsightActivity
@@ -87,7 +101,7 @@ namespace Red_Folder.ActivityTracker.Services
             }
         }
 
-        private async Task<IList<T>> GetAsync<T>(HttpClient client, string url, DateTime start, DateTime end) where T: BaseCourse
+        private async Task<IList<T>> GetAsync<T>(HttpClient client, string url, DateTime start, DateTime end) where T : BaseCourse
         {
             var courses = new List<T>();
 
