@@ -42,6 +42,9 @@ namespace Red_Folder.ActivityTracker.Functions
             log.LogInformation($"Get the Client split");
             var clientActivity = proxy.GetClientActivity();
 
+            log.LogInformation($"Get the focus split");
+            var focusActivity = proxy.GetFocusActivity();
+
             var blobName = $"activity-weekly/{week.Year.ToString("0000")}/{week.WeekNumber.ToString("00")}.json";
 
             log.LogInformation($"Preparing to update ${blobName}");
@@ -62,6 +65,7 @@ namespace Red_Folder.ActivityTracker.Functions
 
                 activity.Skills = skillActivity;
                 activity.Clients = clientActivity;
+                activity.Focus = focusActivity;
 
                 log.LogInformation("Uploading blob");
                 await locker.Upload(activity);

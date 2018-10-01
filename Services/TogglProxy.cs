@@ -46,6 +46,25 @@ namespace Red_Folder.ActivityTracker.Services
             return result;
         }
 
+        public FocusActivity GetFocusActivity()
+        {
+            var result = new FocusActivity();
+
+            var focusDurations = _timeEntries.SelectMany(entry => entry.tags.Where(tag => tag.StartsWith("Focus -")),
+                                                        (entry, tag) => new { tag, entry.Duration }).ToList();
+
+            var focus = focusDurations.GroupBy(skill => skill.tag)
+                            .Select(group => new Skill
+                            {
+                                Name = group.Key.Replace("Focus - ", ""),
+                                TotalDuration = group.Sum(x => (x.Duration / 1000))
+                            });
+
+            result.Focus = focus.ToList();
+
+            return result;
+        }
+
         public ClientActivity GetClientActivity()
         {
             var result = new ClientActivity();

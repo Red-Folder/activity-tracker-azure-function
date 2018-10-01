@@ -52,6 +52,9 @@ namespace Red_Folder.ActivityTracker.Models
         [JsonProperty("skills")]
         public SkillsActivity Skills { get; set; }
 
+        [JsonProperty("focus")]
+        public FocusActivity Focus { get; set; }
+
         [JsonProperty("pluralsight")]
         public PluralsightActivity Pluralsight { get; set; }
 
