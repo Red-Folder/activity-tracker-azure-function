@@ -69,7 +69,9 @@ namespace Red_Folder.ActivityTracker.Models
                     return "Containers";
 
                 case "The Azure Podcast":
-                    return "Azure";
+                case "AWS Podcast":
+                case "DevOps on AWS Radio":
+                    return "Azure & AWS";
 
                 case "More or Less: Behind the Stats":
                 case "Friday Night Comedy from BBC Radio 4":
