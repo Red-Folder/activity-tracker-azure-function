@@ -12,7 +12,6 @@ namespace Red_Folder.ActivityTracker.Functions
         [FunctionName("RetrieveBlogActivity")]
         public static async System.Threading.Tasks.Task RunAsync(
             [TimerTrigger("0 30 10 * * 1")]TimerInfo myTimer,
-            //[TimerTrigger("0 * * * * *")]TimerInfo myTimer,
             Binder binder,
             ILogger log)
         {
@@ -20,8 +19,7 @@ namespace Red_Folder.ActivityTracker.Functions
 
             var blogUrl = Environment.GetEnvironmentVariable("BlogUrl", EnvironmentVariableTarget.Process);
 
-            //var week = Week.LastWeek();
-            var week = Week.Current();
+            var week = Week.LastWeek();
 
             var proxy = new BlogProxy(log);
 
