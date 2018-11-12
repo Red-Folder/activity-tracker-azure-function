@@ -8,7 +8,7 @@ namespace Red_Folder.ActivityTracker.Functions
     public static class GetWeek
     {
         [FunctionName("GetWeek")]
-        public static Week Run(ILogger log)
+        public static Week Run([ActivityTrigger] DurableActivityContext context, ILogger log)
         {
             log.LogInformation("Getting the week to work on.");
 
