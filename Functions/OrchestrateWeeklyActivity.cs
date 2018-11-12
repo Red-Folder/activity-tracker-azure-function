@@ -9,7 +9,7 @@ namespace Red_Folder.ActivityTracker.Functions
     public static class OrchestrateWeeklyActivity
     {
         [FunctionName("OrchestrateWeeklyActivity")]
-        public async static Task Run(DurableOrchestrationContext context, ILogger log)
+        public async static Task Run([OrchestrationTrigger] DurableOrchestrationContext context, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
