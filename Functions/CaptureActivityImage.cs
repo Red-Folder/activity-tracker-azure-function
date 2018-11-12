@@ -13,7 +13,7 @@ namespace Red_Folder.ActivityTracker.Functions
         public async static Task<byte[]> Run([ActivityTrigger] DurableActivityContext context, ILogger log)
         {
             var week = context.GetInput<Week>();
-            log.LogInformation($"Running Capture Activity Image for week #${week.WeekNumber}");
+            log.LogInformation($"Running Capture Activity Image for week #{week.WeekNumber}");
 
             var url = "https://mbtskoudsalg.com/images/example-stamp-png-2.png";
 

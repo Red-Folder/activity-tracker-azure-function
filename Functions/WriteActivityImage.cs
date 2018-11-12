@@ -17,7 +17,7 @@ namespace Red_Folder.ActivityTracker.Functions
 
             var blobName = $"activity-weekly/{week.Year.ToString("0000")}/{week.WeekNumber.ToString("00")}.png";
 
-            log.LogInformation($"Preparing to save ${blobName}");
+            log.LogInformation($"Preparing to save {blobName}");
             var attributes = new Attribute[]
             {
                 new BlobAttribute(blobName),
