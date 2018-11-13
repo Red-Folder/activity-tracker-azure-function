@@ -21,7 +21,7 @@ namespace Red_Folder.ActivityTracker.Functions
             var activityToSave = new Models.WeekActivity(week.Year, week.WeekNumber);
 
             var blogTask = context.CallActivityAsync<BlogActivity>("RetrieveBlogActivity", week);
-            var pluralsightTask = context.CallActivityAsync<PluralsightActivity>("RetrievePluralSightActivity", week);
+            var pluralsightTask = context.CallActivityAsync<PluralsightActivity>("RetrievePluralsightActivity", week);
             var togglTask = context.CallActivityAsync<TogglActivities>("RetrieveTogglActivity", week);
 
             await Task.WhenAll(blogTask, pluralsightTask, togglTask);

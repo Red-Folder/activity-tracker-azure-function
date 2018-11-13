@@ -2,6 +2,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Red_Folder.ActivityTracker.Models;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -15,7 +16,8 @@ namespace Red_Folder.ActivityTracker.Functions
             var week = context.GetInput<Week>();
             log.LogInformation($"Running Capture Activity Image for week #{week.WeekNumber}");
 
-            var url = "https://mbtskoudsalg.com/images/example-stamp-png-2.png";
+            var accessKey = Environment.GetEnvironmentVariable("ScreenshotLayerAccessKey", EnvironmentVariableTarget.Process);
+            var url = $"http://api.screenshotlayer.com/api/capture?access_key={accessKey}&url=https://red-folder.com/activity/weekly/{week.Year.ToString("0000")}/{week.WeekNumber.ToString("00")}&fullpage=1&force=1&delay=2";
 
             var client = new HttpClient();
 
