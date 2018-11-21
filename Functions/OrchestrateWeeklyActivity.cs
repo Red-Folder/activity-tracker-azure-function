@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,8 @@ namespace Red_Folder.ActivityTracker.Functions
 {
     public static class OrchestrateWeeklyActivity
     {
+        private const string APPROVAL_EVENT = "Approval";
+
         [FunctionName("OrchestrateWeeklyActivity")]
         public async static Task Run([OrchestrationTrigger] DurableOrchestrationContext context, ILogger log)
         {
@@ -41,7 +44,41 @@ namespace Red_Folder.ActivityTracker.Functions
                 Week = week,
                 ImageData = imageData
             };
-            await context.CallActivityAsync("WriteActivityImage", activityImage);
+            var filename = await context.CallActivityAsync<string>("WriteActivityImage", activityImage);
+
+            var approvalRequest = new ApprovalTableEntity(APPROVAL_EVENT, context.InstanceId);
+            approvalRequest.Expires = context.CurrentUtcDateTime.AddDays(1);
+            approvalRequest.ImageUrl = $"https://content.red-folder.com/{filename}";
+
+            await context.CallActivityAsync("SendApprovalRequest", approvalRequest);    
+
+            using (var cancellationToken = new CancellationTokenSource())
+            {
+                var timeoutTask = context.CreateTimer(approvalRequest.Expires, cancellationToken.Token);
+
+                var approvalTask = context.WaitForExternalEvent<bool>(APPROVAL_EVENT);
+
+                var winner = await Task.WhenAny(approvalTask, timeoutTask);
+
+                if (!timeoutTask.IsCompleted)
+                {
+                    cancellationToken.Cancel();
+                }
+
+                if (winner == approvalTask)
+                {
+                    if (approvalTask.Result)
+                    {
+                        // approval granted - do the approved action
+                    }
+                    else
+                    {
+                        // approval denied - send a notification
+                    }
+                }
+            }
+
+            await context.CallActivityAsync("CleanupApprovalRequest", approvalRequest);
 
             log.LogInformation($"Run complete");
         }

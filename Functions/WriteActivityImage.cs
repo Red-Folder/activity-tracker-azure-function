@@ -3,13 +3,14 @@ using Red_Folder.ActivityTracker.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using Microsoft.WindowsAzure.Storage.Blob;
+using System.Threading.Tasks;
 
 namespace Red_Folder.ActivityTracker.Functions
 {
     public static class WriteActivityImage
     {
         [FunctionName("WriteActivityImage")]
-        public async static void Run([ActivityTrigger]  DurableActivityContext context, Binder binder, ILogger log)
+        public async static Task<string> Run([ActivityTrigger]  DurableActivityContext context, Binder binder, ILogger log)
         {
             var activityImage = context.GetInput<ActivityImage>();
             var week = activityImage.Week;
@@ -29,6 +30,8 @@ namespace Red_Folder.ActivityTracker.Functions
             await blob.UploadFromByteArrayAsync(imageData, 0, imageData.Length);
 
             log.LogInformation("Image saved");
+
+            return blobName;
         }
     }
 }
