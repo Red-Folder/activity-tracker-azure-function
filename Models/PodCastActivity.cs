@@ -71,6 +71,7 @@ namespace Red_Folder.ActivityTracker.Models
                 case "The Azure Podcast":
                 case "AWS Podcast":
                 case "DevOps on AWS Radio":
+                case "AWS TechChat":
                     return "Azure & AWS";
 
                 case "More or Less: Behind the Stats":
