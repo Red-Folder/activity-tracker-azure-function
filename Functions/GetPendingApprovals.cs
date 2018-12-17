@@ -40,8 +40,7 @@ namespace Red_Folder.ActivityTracker.Functions
                 return new OkObjectResult(pending);
             }
 
-            return new OkObjectResult(req.Headers);
-            //return new UnauthorizedResult();
+            return new UnauthorizedResult();
         }
     }
 }
