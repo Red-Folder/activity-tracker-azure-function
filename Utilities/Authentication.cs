@@ -12,9 +12,9 @@ namespace Red_Folder.ActivityTracker.Utilities
         {
             if (httpRequest == null || httpRequest.Headers == null) return;
 
-            if (string.IsNullOrEmpty(httpRequest.Headers[X_MS_CLIENT_PRINCIPAL_ID])) UserId = httpRequest.Headers[X_MS_CLIENT_PRINCIPAL_ID];
-            if (string.IsNullOrEmpty(httpRequest.Headers[X_MS_CLIENT_PRINCIPAL_NAME])) UserName = httpRequest.Headers[X_MS_CLIENT_PRINCIPAL_NAME];
-            if (string.IsNullOrEmpty(httpRequest.Headers[X_MS_TOKEN_AAD_ID_TOKEN])) Token = httpRequest.Headers[X_MS_TOKEN_AAD_ID_TOKEN];
+            if (!string.IsNullOrEmpty(httpRequest.Headers[X_MS_CLIENT_PRINCIPAL_ID])) UserId = httpRequest.Headers[X_MS_CLIENT_PRINCIPAL_ID];
+            if (!string.IsNullOrEmpty(httpRequest.Headers[X_MS_CLIENT_PRINCIPAL_NAME])) UserName = httpRequest.Headers[X_MS_CLIENT_PRINCIPAL_NAME];
+            if (!string.IsNullOrEmpty(httpRequest.Headers[X_MS_TOKEN_AAD_ID_TOKEN])) Token = httpRequest.Headers[X_MS_TOKEN_AAD_ID_TOKEN];
         }
 
         public bool IsAuthorised => !string.IsNullOrEmpty(UserId);
