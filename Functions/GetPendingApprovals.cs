@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using Microsoft.WindowsAzure.Storage.Table;
 using Red_Folder.ActivityTracker.Models;
+using Red_Folder.ActivityTracker.Utilities;
 
 namespace Red_Folder.ActivityTracker.Functions
 {
@@ -14,24 +15,32 @@ namespace Red_Folder.ActivityTracker.Functions
     {
         [FunctionName("GetPendingApprovals")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             [Table("PendingApprovals", Connection = "AzureWebJobsStorage")]CloudTable destination,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation("Request made for all pending approvals");
 
-            TableContinuationToken token = null;
-            var pendingEntities = await destination.ExecuteQuerySegmentedAsync(new TableQuery<ApprovalTableEntity>(), token);
+            var authentication = new Authentication(req);
 
-            var pending = pendingEntities.Select(x => new
+            if (authentication.IsAuthorised)
             {
-                eventName = x.EventName,
-                instanceId = x.InstanceId,
-                imageUrl = x.ImageUrl,
-                expires = x.Expires
-            }).ToArray();
 
-            return new OkObjectResult(pending);
+                TableContinuationToken token = null;
+                var pendingEntities = await destination.ExecuteQuerySegmentedAsync(new TableQuery<ApprovalTableEntity>(), token);
+
+                var pending = pendingEntities.Select(x => new
+                {
+                    eventName = x.EventName,
+                    instanceId = x.InstanceId,
+                    imageUrl = x.ImageUrl,
+                    expires = x.Expires
+                }).ToArray();
+
+                return new OkObjectResult(pending);
+            }
+
+            return new UnauthorizedResult();
         }
     }
 }
