@@ -17,37 +17,34 @@ namespace Red_Folder.ActivityTracker.Functions
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
-            //var week = await context.CallActivityAsync<Week>("GetWeek", null);
-            //log.LogInformation($"Running for week {week.WeekNumber}");
+            var week = await context.CallActivityAsync<Week>("GetWeek", null);
+            log.LogInformation($"Running for week {week.WeekNumber}");
 
 
-            //var activityToSave = new Models.WeekActivity(week.Year, week.WeekNumber);
+            var activityToSave = new Models.WeekActivity(week.Year, week.WeekNumber);
 
-            //var blogTask = context.CallActivityAsync<BlogActivity>("RetrieveBlogActivity", week);
-            //var pluralsightTask = context.CallActivityAsync<PluralsightActivity>("RetrievePluralsightActivity", week);
-            //var togglTask = context.CallActivityAsync<TogglActivities>("RetrieveTogglActivity", week);
+            var blogTask = context.CallActivityAsync<BlogActivity>("RetrieveBlogActivity", week);
+            var pluralsightTask = context.CallActivityAsync<PluralsightActivity>("RetrievePluralsightActivity", week);
+            var togglTask = context.CallActivityAsync<TogglActivities>("RetrieveTogglActivity", week);
 
-            //await Task.WhenAll(blogTask, pluralsightTask, togglTask);
+            await Task.WhenAll(blogTask, pluralsightTask, togglTask);
 
-            //activityToSave.Blogs = blogTask.Result;
-            //activityToSave.Pluralsight = pluralsightTask.Result;
-            //activityToSave.Skills = togglTask.Result.Skills;
-            //activityToSave.Focus = togglTask.Result.Focus;
-            //activityToSave.Clients = togglTask.Result.Clients;
+            activityToSave.Blogs = blogTask.Result;
+            activityToSave.Pluralsight = pluralsightTask.Result;
+            activityToSave.Skills = togglTask.Result.Skills;
+            activityToSave.Focus = togglTask.Result.Focus;
+            activityToSave.Clients = togglTask.Result.Clients;
 
-            //await context.CallActivityAsync("SaveActivity", activityToSave);
+            await context.CallActivityAsync("SaveActivity", activityToSave);
 
-            //var imageData = await context.CallActivityAsync<byte[]>("CaptureActivityImage", week);
+            var imageData = await context.CallActivityAsync<byte[]>("CaptureActivityImage", week);
 
-            //var activityImage = new ActivityImage
-            //{
-            //    Week = week,
-            //    ImageData = imageData
-            //};
-            //var filename = await context.CallActivityAsync<string>("WriteActivityImage", activityImage);
-
-            var week = Week.FromYearAndWeekNumber(2018, 50);
-            var filename = "activity-weekly/2018/50.png";
+            var activityImage = new ActivityImage
+            {
+                Week = week,
+                ImageData = imageData
+            };
+            var filename = await context.CallActivityAsync<string>("WriteActivityImage", activityImage);
 
             var approvalRequest = new ApprovalTableEntity(APPROVAL_EVENT, context.InstanceId);
             approvalRequest.Expires = context.CurrentUtcDateTime.AddDays(1);
