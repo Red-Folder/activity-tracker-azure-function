@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Red_Folder.ActivityTracker.Utilities;
 
 namespace Red_Folder.ActivityTracker.Functions
 {
@@ -13,19 +14,27 @@ namespace Red_Folder.ActivityTracker.Functions
     {
         [FunctionName("Approve")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             [OrchestrationClient] DurableOrchestrationClient client,
             ILogger log)
         {
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            var instanceId = data.instanceId.Value;
-            var eventName = data.eventName.Value;
-            var approved = data.approved.Value;
 
-            await client.RaiseEventAsync(instanceId, eventName, approved);
+            var authentication = new Authentication(req);
 
-            return new OkResult();
+            if (authentication.IsAuthorised)
+            {
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                var instanceId = data.instanceId.Value;
+                var eventName = data.eventName.Value;
+                var approved = data.approved.Value;
+
+                await client.RaiseEventAsync(instanceId, eventName, approved);
+
+                return new OkResult();
+            }
+
+            return new UnauthorizedResult();
         }
     }
 }
