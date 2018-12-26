@@ -34,7 +34,10 @@ namespace Red_Folder.ActivityTracker.Functions
                     eventName = x.EventName,
                     instanceId = x.InstanceId,
                     imageUrl = x.ImageUrl,
-                    expires = x.Expires
+                    expires = x.Expires,
+                    weekNumber = x.WeekNumber,
+                    from = x.From,
+                    to = x.To
                 }).ToArray();
 
                 return new OkObjectResult(pending);

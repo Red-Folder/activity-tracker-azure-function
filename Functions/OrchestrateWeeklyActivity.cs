@@ -49,6 +49,9 @@ namespace Red_Folder.ActivityTracker.Functions
             var approvalRequest = new ApprovalTableEntity(APPROVAL_EVENT, context.InstanceId);
             approvalRequest.Expires = context.CurrentUtcDateTime.AddDays(1);
             approvalRequest.ImageUrl = $"https://content.red-folder.com/{filename}";
+            approvalRequest.WeekNumber = week.WeekNumber;
+            approvalRequest.From = week.Start;
+            approvalRequest.To = week.End;
 
             await context.CallActivityAsync("SendApprovalRequest", approvalRequest);    
 

@@ -24,5 +24,10 @@ namespace Red_Folder.ActivityTracker.Models
         public bool Expired => Expires < DateTime.Now;
 
         public string ImageUrl { get; set; }
+
+        public int WeekNumber { get; set; }
+
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
     }
 }
