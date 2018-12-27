@@ -76,7 +76,14 @@ namespace Red_Folder.ActivityTracker.Functions
                 {
                     if (approvalTask.Result)
                     {
-                        // approval granted - do the approved action
+                        var weeklyActivityToBeTweeted = new WeeklyActivityToBeTweeted
+                        {
+                            Year = week.Year,
+                            WeekNumber = week.WeekNumber,
+                            ImageUrl = approvalRequest.ImageUrl
+                        };
+
+                        await context.CallActivityAsync("NewWeeklyActivityActions", weeklyActivityToBeTweeted);
                     }
                     else
                     {
