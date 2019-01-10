@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 
 namespace Red_Folder.ActivityTracker.Utilities
 {
@@ -22,5 +23,23 @@ namespace Red_Folder.ActivityTracker.Utilities
         public string UserId { get; }
         public string UserName { get; }
         public string Token { get; }
+
+        public bool Disabled
+        {
+            get
+            {
+                try
+                {
+                    var authenticationConfig = Environment.GetEnvironmentVariable("Authentication", EnvironmentVariableTarget.Process);
+
+                    if (authenticationConfig == "DISABLED") return true;
+                }
+                catch (Exception ex)
+                {
+                }
+
+                return false;
+            }
+        }
     }
 }
