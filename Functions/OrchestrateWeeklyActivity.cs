@@ -16,7 +16,7 @@ namespace Red_Folder.ActivityTracker.Functions
         public async static Task Run([OrchestrationTrigger] DurableOrchestrationContext context, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-
+            /*
             var week = await context.CallActivityAsync<Week>("GetWeek", null);
             log.LogInformation($"Running for week {week.WeekNumber}");
 
@@ -45,10 +45,17 @@ namespace Red_Folder.ActivityTracker.Functions
                 ImageData = imageData
             };
             var filename = await context.CallActivityAsync<string>("WriteActivityImage", activityImage);
+            */
+
+            var week = Week.FromYearAndWeekNumber(2018, 51);
+            var filename = "activity-weekly/2018/51.png";
 
             var approvalRequest = new ApprovalTableEntity(APPROVAL_EVENT, context.InstanceId);
             approvalRequest.Expires = context.CurrentUtcDateTime.AddDays(1);
             approvalRequest.ImageUrl = $"https://content.red-folder.com/{filename}";
+            approvalRequest.WeekNumber = week.WeekNumber;
+            approvalRequest.From = week.Start;
+            approvalRequest.To = week.End;
 
             await context.CallActivityAsync("SendApprovalRequest", approvalRequest);    
 
@@ -69,7 +76,14 @@ namespace Red_Folder.ActivityTracker.Functions
                 {
                     if (approvalTask.Result)
                     {
-                        // approval granted - do the approved action
+                        var weeklyActivityToBeTweeted = new WeeklyActivityToBeTweeted
+                        {
+                            Year = week.Year,
+                            WeekNumber = week.WeekNumber,
+                            ImageUrl = approvalRequest.ImageUrl
+                        };
+
+                        await context.CallActivityAsync("NewWeeklyActivityActions", weeklyActivityToBeTweeted);
                     }
                     else
                     {
