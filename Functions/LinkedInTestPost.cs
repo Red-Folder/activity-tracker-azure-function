@@ -13,9 +13,9 @@ using Red_Folder.ActivityTracker.Services;
 
 namespace Red_Folder.ActivityTracker.Functions
 {
-    public static class RequestLinkedInAccessToken
+    public static class LinkedInTestPost
     {
-        [FunctionName("RequestLinkedInAccessToken")]
+        [FunctionName("LinkedInTestPost")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             ILogger log)
@@ -29,7 +29,7 @@ namespace Red_Folder.ActivityTracker.Functions
                 try
                 {
                     var json = await req.ReadAsStringAsync();
-                    var data = JsonConvert.DeserializeObject<AccessTokenRequest>(json);
+                    var data = JsonConvert.DeserializeObject<ShareRequest>(json);
 
                     var linkedInUserId = Environment.GetEnvironmentVariable("LinkedInUserId", EnvironmentVariableTarget.Process);
                     var linkedInClientId = Environment.GetEnvironmentVariable("LinkedInClientId", EnvironmentVariableTarget.Process);
@@ -37,9 +37,10 @@ namespace Red_Folder.ActivityTracker.Functions
 
                     var proxy = new LinkedInProxy(linkedInUserId, linkedInClientId, linkedInClientSecret, log);
 
-                    var result = await proxy.RequestAccessToken(data);
+                    await proxy.CreateShare(data.AccessToken);
 
-                    return new OkObjectResult(result);
+                    return new OkResult();
+                    //return new OkObjectResult(result);
                 }
                 catch (Exception ex)
                 {

@@ -3,18 +3,21 @@ using Newtonsoft.Json;
 using Red_Folder.ActivityTracker.Models.LinkedIn;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Red_Folder.ActivityTracker.Services
 {
     public class LinkedInProxy
     {
+        private string _userId;
         private string _clientId;
         private string _clientSecret;
         private ILogger _log;
 
-        public LinkedInProxy(string clientId, string clientSecret, ILogger log)
+        public LinkedInProxy(string userId, string clientId, string clientSecret, ILogger log)
         {
+            _userId = userId;
             _clientId = clientId;
             _clientSecret = clientSecret;
             _log = log;
@@ -44,6 +47,26 @@ namespace Red_Folder.ActivityTracker.Services
                     AccessToken = raw.AccessToken,
                     SecondsTillExpires = raw.ExpiresIn
                 };
+            }
+        }
+
+        public async Task CreateShare(string accessToken)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("X-Restli-Protocol-Version", "2.0.0");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                var shareRequest = new Models.LinkedIn.Raw.ShareRequest
+                {
+                    Author = _userId
+                };
+
+                var response = await client.PostAsJsonAsync<Models.LinkedIn.Raw.ShareRequest>("https://api.linkedin.com/v2/ugcPosts", shareRequest);
+
+                string json = await response.Content.ReadAsStringAsync();
+
+                //var raw = JsonConvert.DeserializeObject<Models.LinkedIn.Raw.AccessTokenResponse>(json);
             }
         }
     }
