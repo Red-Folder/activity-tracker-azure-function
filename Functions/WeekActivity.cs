@@ -16,7 +16,7 @@ namespace Red_Folder.ActivityTracker.Functions
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "weeklyactivity/{year}/{weekNumber}")]HttpRequest req,
             int? year, 
             int? weekNumber,
-            [Blob("activity-weekly/{year}/{weekNumber}.json", Connection = "AzureWebJobsStorage")]string weeklyActivity,
+            [Blob("activity-weekly/{year}/{weekNumber.ToString(\"00\")}.json", Connection = "AzureWebJobsStorage")]string weeklyActivity,
             ILogger log)
         {
             log.LogInformation($"Weekyl Activity requested for Year: {year}, Week Number: {weekNumber}");
