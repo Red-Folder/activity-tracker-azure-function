@@ -4,6 +4,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Red_Folder.ActivityTracker.Models;
 
 namespace Red_Folder.ActivityTracker.Functions
 {
@@ -15,7 +17,9 @@ namespace Red_Folder.ActivityTracker.Functions
             [OrchestrationClient] DurableOrchestrationClient starter,
             ILogger log)
         {
-            await starter.StartNewAsync("OrchestrateWeeklyActivity", null);
+            var json = await req.ReadAsStringAsync();
+            var instruction = JsonConvert.DeserializeObject<OrchestrationInstruction>(json);
+            await starter.StartNewAsync("OrchestrateWeeklyActivity", instruction);
 
             return new OkResult();
         }

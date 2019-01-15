@@ -16,35 +16,26 @@ namespace Red_Folder.ActivityTracker.Functions
         public async static Task Run([OrchestrationTrigger] DurableOrchestrationContext context, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            var week = await context.CallActivityAsync<Week>("GetWeek", null);
+
+            var instruction = context.GetInput<OrchestrationInstruction>();
+
+            var week = instruction.PerformGetWeek ?
+                            await GetWeek(context) :
+                            Week.FromYearAndWeekNumber(instruction.Year, instruction.WeekNumber);
+
+
             log.LogInformation($"Running for week {week.WeekNumber}");
 
-
-            var activityToSave = new Models.WeekActivity(week.Year, week.WeekNumber);
-
-            var blogTask = context.CallActivityAsync<BlogActivity>("RetrieveBlogActivity", week);
-            var pluralsightTask = context.CallActivityAsync<PluralsightActivity>("RetrievePluralsightActivity", week);
-            var togglTask = context.CallActivityAsync<TogglActivities>("RetrieveTogglActivity", week);
-
-            await Task.WhenAll(blogTask, pluralsightTask, togglTask);
-
-            activityToSave.Blogs = blogTask.Result;
-            activityToSave.Pluralsight = pluralsightTask.Result;
-            activityToSave.Skills = togglTask.Result.Skills;
-            activityToSave.Focus = togglTask.Result.Focus;
-            activityToSave.Clients = togglTask.Result.Clients;
-
-            await context.CallActivityAsync("SaveActivity", activityToSave);
-
-            var imageData = await context.CallActivityAsync<byte[]>("CaptureActivityImage", week);
-
-            var activityImage = new ActivityImage
+            if (instruction.PerformRetrieval)
             {
-                Week = week,
-                ImageData = imageData
-            };
-            var filename = await context.CallActivityAsync<string>("WriteActivityImage", activityImage);
+                await RetrieveActivity(context, week);
+            }
 
+            var filename = instruction.PerformScreenCapture ?
+                            await ScreenCapture(context, week) :
+                            instruction.Filename;
+
+            
             //var week = Week.FromYearAndWeekNumber(2018, 51);
             //var filename = "activity-weekly/2018/51.png";
 
@@ -55,7 +46,7 @@ namespace Red_Folder.ActivityTracker.Functions
             approvalRequest.From = week.Start;
             approvalRequest.To = week.End;
 
-            await context.CallActivityAsync("SendApprovalRequest", approvalRequest);    
+            await context.CallActivityAsync("SendApprovalRequest", approvalRequest);
 
             using (var cancellationToken = new CancellationTokenSource())
             {
@@ -93,6 +84,42 @@ namespace Red_Folder.ActivityTracker.Functions
             await context.CallActivityAsync("CleanupApprovalRequest", approvalRequest);
 
             log.LogInformation($"Run complete");
+        }
+
+        public static async Task<Week> GetWeek(DurableOrchestrationContext context)
+        {
+            return await context.CallActivityAsync<Week>("GetWeek", null);
+        }
+
+        private static async Task RetrieveActivity(DurableOrchestrationContext context, Week week)
+        {
+            var activityToSave = new Models.WeekActivity(week.Year, week.WeekNumber);
+
+            var blogTask = context.CallActivityAsync<BlogActivity>("RetrieveBlogActivity", week);
+            var pluralsightTask = context.CallActivityAsync<PluralsightActivity>("RetrievePluralsightActivity", week);
+            var togglTask = context.CallActivityAsync<TogglActivities>("RetrieveTogglActivity", week);
+
+            await Task.WhenAll(blogTask, pluralsightTask, togglTask);
+
+            activityToSave.Blogs = blogTask.Result;
+            activityToSave.Pluralsight = pluralsightTask.Result;
+            activityToSave.Skills = togglTask.Result.Skills;
+            activityToSave.Focus = togglTask.Result.Focus;
+            activityToSave.Clients = togglTask.Result.Clients;
+
+            await context.CallActivityAsync("SaveActivity", activityToSave);
+        }
+
+        private static async Task<string> ScreenCapture(DurableOrchestrationContext context, Week week)
+        {
+            var imageData = await context.CallActivityAsync<byte[]>("CaptureActivityImage", week);
+
+            var activityImage = new ActivityImage
+            {
+                Week = week,
+                ImageData = imageData
+            };
+            return await context.CallActivityAsync<string>("WriteActivityImage", activityImage);
         }
     }
 }
