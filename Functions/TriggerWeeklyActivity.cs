@@ -14,7 +14,7 @@ namespace Red_Folder.ActivityTracker.Functions
             {
                 StartFrom = OrchestrationStep.FromStart
             };
-            return starter.StartNewAsync("OrchestrateWeeklyActivity", null);
+            return starter.StartNewAsync("OrchestrateWeeklyActivity", instructions);
         }
     }
 }
