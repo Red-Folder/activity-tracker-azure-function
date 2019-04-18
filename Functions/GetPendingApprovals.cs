@@ -15,35 +15,27 @@ namespace Red_Folder.ActivityTracker.Functions
     {
         [FunctionName("GetPendingApprovals")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
             [Table("PendingApprovals", Connection = "AzureWebJobsStorage")]CloudTable destination,
             ILogger log)
         {
             log.LogInformation("Request made for all pending approvals");
 
-            var authentication = new Authentication(req);
+            TableContinuationToken token = null;
+            var pendingEntities = await destination.ExecuteQuerySegmentedAsync(new TableQuery<ApprovalTableEntity>(), token);
 
-            if (authentication.IsAuthorised)
+            var pending = pendingEntities.Select(x => new
             {
+                eventName = x.EventName,
+                instanceId = x.InstanceId,
+                imageUrl = x.ImageUrl,
+                expires = x.Expires,
+                weekNumber = x.WeekNumber,
+                from = x.From,
+                to = x.To
+            }).ToArray();
 
-                TableContinuationToken token = null;
-                var pendingEntities = await destination.ExecuteQuerySegmentedAsync(new TableQuery<ApprovalTableEntity>(), token);
-
-                var pending = pendingEntities.Select(x => new
-                {
-                    eventName = x.EventName,
-                    instanceId = x.InstanceId,
-                    imageUrl = x.ImageUrl,
-                    expires = x.Expires,
-                    weekNumber = x.WeekNumber,
-                    from = x.From,
-                    to = x.To
-                }).ToArray();
-
-                return new OkObjectResult(pending);
-            }
-
-            return new UnauthorizedResult();
+            return new OkObjectResult(pending);
         }
     }
 }
