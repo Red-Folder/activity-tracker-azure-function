@@ -64,6 +64,9 @@ namespace Red_Folder.ActivityTracker.Models
         [JsonProperty("blogs")]
         public BlogActivity Blogs { get; set; }
 
+        [JsonProperty("events")]
+        public EventActivity Events { get; set; }
+
         public void AddPodCast(PodCast podCast)
         {
             if (PodCasts == null) PodCasts = new PodCastActivity();
