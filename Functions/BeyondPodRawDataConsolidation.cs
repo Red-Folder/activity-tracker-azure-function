@@ -44,7 +44,18 @@ namespace Red_Folder.ActivityTracker.Functions
 
             if (shouldBeProgressed)
             {
-                podcastReadyToGo.Add(podCast.ToPodCast());
+                try
+                {
+                    var converter = new Services.PodCast.PodCastConverter();
+                    var activityPodcast = converter.Convert(podCast);
+                    podcastReadyToGo.Add(activityPodcast);
+                }
+                catch (Exception ex)
+                {
+                    log.LogError("Failed use the new converter", ex);
+                    log.LogError(ex.Message);
+                    podcastReadyToGo.Add(podCast.ToPodCast());
+                }
             }
         }
 

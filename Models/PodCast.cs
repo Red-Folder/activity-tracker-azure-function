@@ -53,5 +53,7 @@ namespace Red_Folder.ActivityTracker.Models
         [JsonProperty("actioned")]
         public bool Actioned { get; set; }
 
+        [JsonProperty("category")]
+        public string Category { get; set; }
     }
 }
