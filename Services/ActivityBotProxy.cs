@@ -6,7 +6,6 @@ namespace Red_Folder.ActivityTracker.Services
 {
     public class ActivityBotProxy
     {
-        //private readonly string _directlineUrl;
         private readonly string _secret;
 
         public ActivityBotProxy(string secret)
@@ -18,7 +17,18 @@ namespace Red_Folder.ActivityTracker.Services
         {
             var client = new DirectLineClient(_secret);
             var conversation = await client.Conversations.StartConversationAsync();
+
             await client.Conversations.PostActivityAsync(conversation.ConversationId, payload.ToActivityBotActivity());
+
+            await client.Conversations.PostActivityAsync(conversation.ConversationId, new Activity
+            {
+                Type = ActivityTypes.EndOfConversation,
+                From = new ChannelAccount
+                {
+                    Id = "ActivityTracker",
+                    Name = "Activity Tracker functions"
+                }
+            });
         }
     }
 }
