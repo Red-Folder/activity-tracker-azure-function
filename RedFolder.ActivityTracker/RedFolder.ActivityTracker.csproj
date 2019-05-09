@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RedFolder.ActivityFolder.Models\RedFolder.ActivityFolder.Models.csproj" />
     <ProjectReference Include="..\RedFolder.ActivityTracker.ActivityBot\RedFolder.ActivityTracker.ActivityBot.csproj" />
+    <ProjectReference Include="..\RedFolder.ActivityTracker.BeyondPod\RedFolder.ActivityTracker.BeyondPod.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

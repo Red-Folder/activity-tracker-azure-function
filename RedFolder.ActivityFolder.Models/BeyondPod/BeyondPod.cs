@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace RedFolder.ActivityTracker.Models
+namespace RedFolder.ActivityTracker.Models.BeyondPod
 {
-    public class BeyondPod
+    public class PodCast
     {
         public DateTime Created { get; set; }
         public bool Playing { get; set; }

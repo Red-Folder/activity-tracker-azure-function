@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using RedFolder.ActivityTracker.BeyondPod.Converters.Handlers;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace RedFolder.ActivityTracker.Services.PodCast
+namespace RedFolder.ActivityTracker.BeyondPod.Converters
 {
     public class PodCastConverter
     {
@@ -65,7 +66,7 @@ namespace RedFolder.ActivityTracker.Services.PodCast
             }
         }
 
-        public Models.PodCast Convert(Models.PodCastTableEntity source)
+        public Models.PodCast Convert(Models.BeyondPod.PodCastTableEntity source)
         {
             return _rootHandler.Convert(source);
         }

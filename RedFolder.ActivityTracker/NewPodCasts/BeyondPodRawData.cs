@@ -5,7 +5,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace RedFolder.ActivityTracker
+namespace RedFolder.ActivityTracker.NewPodCasts
 {
     public class BeyondPodRawData
     {

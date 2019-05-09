@@ -1,18 +1,19 @@
 ﻿using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
+using RedFolder.ActivityTracker.BeyondPod.Converters;
 using RedFolder.ActivityTracker.Models;
 using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedFolder.ActivityTracker
+namespace RedFolder.ActivityTracker.NewPodCasts
 {
     public class BeyondPodRawDataConsolidation
     {
         [FunctionName("BeyondPodRawDataConsolidation")]
-        public static async System.Threading.Tasks.Task RunAsync([QueueTrigger("beyond-pod-raw-data", Connection= "AzureWebJobsStorage")]BeyondPod source, 
+        public static async System.Threading.Tasks.Task RunAsync([QueueTrigger("beyond-pod-raw-data", Connection= "AzureWebJobsStorage")]PodCast source, 
                                 [Table("PodCasts", Connection = "AzureWebJobsStorage")]CloudTable destination, 
                                 [Queue("new-podcast", Connection = "AzureWebJobsStorage")]ICollector<PodCast> podcastReadyToGo,
                                 ILogger log)
@@ -21,13 +22,13 @@ namespace RedFolder.ActivityTracker
 
             var partitionKey = ToAzureKeyString(source.FeedName);
             var rowKey = ToAzureKeyString(source.EpisodeName);
-            var retrieveOperation = TableOperation.Retrieve<PodCastTableEntity>(partitionKey, rowKey);
+            var retrieveOperation = TableOperation.Retrieve<Models.BeyondPod.PodCastTableEntity>(partitionKey, rowKey);
 
             log.LogInformation($"Trying to load existing podcast record");
             var query = await destination.ExecuteAsync(retrieveOperation);
             var isNew = (query.Result == null);
 
-            PodCastTableEntity podCast = isNew ? NewPodCast(partitionKey, rowKey, source) : UpdatePodCast((PodCastTableEntity)query.Result, source);
+            Models.BeyondPod.PodCastTableEntity podCast = isNew ? NewPodCast(partitionKey, rowKey, source) : UpdatePodCast((Models.BeyondPod.PodCastTableEntity)query.Result, source);
 
             podCast = ApplyFixes(podCast);
 
@@ -43,24 +44,15 @@ namespace RedFolder.ActivityTracker
 
             if (shouldBeProgressed)
             {
-                try
-                {
-                    var converter = new Services.PodCast.PodCastConverter();
-                    var activityPodcast = converter.Convert(podCast);
-                    podcastReadyToGo.Add(activityPodcast);
-                }
-                catch (Exception ex)
-                {
-                    log.LogError("Failed use the new converter", ex);
-                    log.LogError(ex.Message);
-                    podcastReadyToGo.Add(podCast.ToPodCast());
-                }
+                var converter = new PodCastConverter();
+                var activityPodcast = converter.Convert(podCast);
+                podcastReadyToGo.Add(activityPodcast);
             }
         }
 
-        public static PodCastTableEntity NewPodCast(String partitionKey, String rowKey, BeyondPod source)
+        public static Models.BeyondPod.PodCastTableEntity NewPodCast(String partitionKey, String rowKey, PodCast source)
         {
-            var podCast = new PodCastTableEntity(partitionKey, rowKey);
+            var podCast = new Models.BeyondPod.PodCastTableEntity(partitionKey, rowKey);
 
             podCast.Created = source.Created;
             podCast.Playing = source.Playing;
@@ -81,7 +73,7 @@ namespace RedFolder.ActivityTracker
             return podCast;
         }
 
-        public static PodCastTableEntity UpdatePodCast(PodCastTableEntity podCast, BeyondPod source)
+        public static Models.BeyondPod.PodCastTableEntity UpdatePodCast(Models.BeyondPod.PodCastTableEntity podCast, PodCast source)
         {
             if (source.Created > podCast.Created)
             {
@@ -99,7 +91,7 @@ namespace RedFolder.ActivityTracker
             return podCast;
         }
 
-        public static async Task Save(CloudTable destination, bool isNew, PodCastTableEntity podCast)
+        public static async Task Save(CloudTable destination, bool isNew, Models.BeyondPod.PodCastTableEntity podCast)
         {
             if (isNew)
             {
@@ -113,7 +105,7 @@ namespace RedFolder.ActivityTracker
             }
         }
 
-        public static PodCastTableEntity ApplyFixes(PodCastTableEntity podCast)
+        public static Models.BeyondPod.PodCastTableEntity ApplyFixes(Models.BeyondPod.PodCastTableEntity podCast)
         {
             // Apply fix for when duration is less than position
             if (podCast.EpisodeDuration < podCast.EpisodePosition) podCast.EpisodeDuration = podCast.EpisodePosition;
@@ -124,7 +116,7 @@ namespace RedFolder.ActivityTracker
             return podCast;
         }
 
-        public static bool ShouldPodCastBeProgressed(PodCastTableEntity podCast)
+        public static bool ShouldPodCastBeProgressed(Models.BeyondPod.PodCastTableEntity podCast)
         {
             if (podCast.Actioned) return false;
             if (podCast.EpisodeDuration == 0) return false;

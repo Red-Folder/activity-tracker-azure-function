@@ -1,7 +1,6 @@
-﻿using RedFolder.ActivityTracker.Models;
-using System;
+﻿using System;
 
-namespace RedFolder.ActivityTracker.Services.PodCast
+namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
 {
     public class CategoryHandler : IHandler
     {
@@ -11,6 +10,9 @@ namespace RedFolder.ActivityTracker.Services.PodCast
 
         public CategoryHandler(string category, string feedname)
         {
+            if (string.IsNullOrEmpty(category)) throw new NullReferenceException(nameof(category));
+            if (string.IsNullOrEmpty(feedname)) throw new NullReferenceException(nameof(feedname));
+
             _feedname = feedname;
             _category = category;
         }
@@ -20,7 +22,7 @@ namespace RedFolder.ActivityTracker.Services.PodCast
             _inner = inner;
         }
 
-        public Models.PodCast Convert(PodCastTableEntity source)
+        public Models.PodCast Convert(Models.BeyondPod.PodCastTableEntity source)
         {
             if (_inner == null) return null;
 

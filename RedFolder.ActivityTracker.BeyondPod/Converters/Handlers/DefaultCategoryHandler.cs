@@ -1,6 +1,4 @@
-﻿using RedFolder.ActivityTracker.Models;
-
-namespace RedFolder.ActivityTracker.Services.PodCast
+﻿namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
 {
     public class DefaultCategoryHandler : IHandler
     {
@@ -11,7 +9,7 @@ namespace RedFolder.ActivityTracker.Services.PodCast
             _inner = inner;
         }
 
-        public Models.PodCast Convert(PodCastTableEntity source)
+        public Models.PodCast Convert(Models.BeyondPod.PodCastTableEntity source)
         {
             if (_inner == null) return null;
 

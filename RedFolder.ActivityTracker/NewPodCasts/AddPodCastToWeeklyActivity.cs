@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Blob;
 using RedFolder.ActivityTracker.Services;
 
-namespace RedFolder.ActivityTracker
+namespace RedFolder.ActivityTracker.NewPodCasts
 {
     public static class AddPodCastToWeeklyActivityx
     {

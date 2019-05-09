@@ -1,9 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace RedFolder.ActivityTracker.Models
+namespace RedFolder.ActivityTracker.Models.BeyondPod
 {
     public class PodCastTableEntity : TableEntity
     {
@@ -32,27 +30,5 @@ namespace RedFolder.ActivityTracker.Models
         public string Track { get; set; }
 
         public bool Actioned { get; set; }
-
-        public PodCast ToPodCast()
-        {
-            return new PodCast
-            {
-                Created = this.Created,
-                Playing = this.Playing,
-                FeedName = this.FeedName,
-                FeedUrl = this.FeedUrl,
-                EpisodeName = this.EpisodeName,
-                EpisodeUrl = this.EpisodeUrl,
-                EpisodeFile = this.EpisodeFile,
-                EpisodePostUrl = this.EpisodePostUrl,
-                EpisodeMime = this.EpisodeMime,
-                EpisodeSummary = this.EpisodeSummary,
-                EpisodeDuration = this.EpisodeDuration,
-                EpisodePosition = this.EpisodePosition,
-                Artist = this.Artist,
-                Album = this.Album,
-                Track = this.Track
-            };
-        }
     }
 }

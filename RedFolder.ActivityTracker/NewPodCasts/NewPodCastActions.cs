@@ -5,7 +5,7 @@ using RedFolder.ActivityTracker.Models;
 using RedFolder.ActivityTracker.Models.ActivityBot;
 using RedFolder.ActivityTracker.Services;
 
-namespace RedFolder.ActivityTracker
+namespace RedFolder.ActivityTracker.NewPodCasts
 {
     public static class NewPodCastActions
     {

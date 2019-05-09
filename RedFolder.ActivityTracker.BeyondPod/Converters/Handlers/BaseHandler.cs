@@ -1,4 +1,4 @@
-﻿namespace RedFolder.ActivityTracker.Services.PodCast
+﻿namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
 {
     public class BaseHandler: IHandler
     {
@@ -7,7 +7,7 @@
             throw new System.NotImplementedException();
         }
 
-        public Models.PodCast Convert(Models.PodCastTableEntity source)
+        public Models.PodCast Convert(Models.BeyondPod.PodCastTableEntity source)
         {
             return new Models.PodCast
             {
@@ -25,7 +25,9 @@
                 EpisodePosition = source.EpisodePosition,
                 Artist = source.Artist,
                 Album = source.Album,
-                Track = source.Track
+                Track = source.Track,
+                Actioned = source.Actioned,
+                Category = ""
             };
         }
     }
