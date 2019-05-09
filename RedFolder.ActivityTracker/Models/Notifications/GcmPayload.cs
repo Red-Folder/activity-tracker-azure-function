@@ -1,11 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RedFolder.ActivityTracker.Models.Notifications
 {
-    public class GcmPayload
+    public class FcmPayload
     {
         [JsonProperty("notification")]
         public Notification Payload { get; set; }

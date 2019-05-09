@@ -30,9 +30,9 @@ namespace RedFolder.ActivityTracker
             var connectionString = Environment.GetEnvironmentVariable("NotificationHubConnectionString", EnvironmentVariableTarget.Process);
             var hub = new NotificationHubClient(connectionString, "rfc-activity");
 
-            var notification = new GcmPayload
+            var notification = new FcmPayload
             {
-                Payload = new GcmPayload.Notification
+                Payload = new FcmPayload.Notification
                 {
                     Title = "Awaiting Approval",
                     Message = "New Activity Image",
