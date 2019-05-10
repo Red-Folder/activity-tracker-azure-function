@@ -6,17 +6,22 @@ using Microsoft.Extensions.Logging;
 
 namespace RedFolder.ActivityTracker
 {
-    public static class Ping
+    public class Ping
     {
+        private readonly ITest _test;
+
+        public Ping(ITest test)
+        {
+            _test = test;
+        }
+
         [FunctionName("Ping")]
-        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequest req,
-                                        Startup.ITest test,
-                                        ILogger log)
+        public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)]HttpRequest req,
+                                 ILogger log)
         {
             log.LogInformation("Ping called");
 
-            //var test = new Startup.Test();
-            return new OkObjectResult(test.Hello());
+            return new OkObjectResult(_test.Hello());
             //return new OkResult();
         }
     }
