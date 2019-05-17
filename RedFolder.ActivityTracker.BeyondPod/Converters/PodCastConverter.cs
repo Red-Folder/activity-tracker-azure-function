@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace RedFolder.ActivityTracker.BeyondPod.Converters
 {
-    public class PodCastConverter
+    public class PodCastConverter : IPodCastConverter
     {
         private readonly IHandler _rootHandler;
 

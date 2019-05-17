@@ -1,41 +1,31 @@
-﻿using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.Extensions.Logging;
 using RedFolder.ActivityTracker.BeyondPod.Converters;
-using RedFolder.ActivityTracker.Models;
-using System;
-using System.Linq;
-using System.Text;
+using RedFolder.ActivityTracker.BeyondPod.Infrastructure;
 using System.Threading.Tasks;
 
-namespace RedFolder.ActivityTracker.NewPodCasts
+namespace RedFolder.ActivityTracker.BeyondPod
 {
-    public class BeyondPodRawDataConsolidation
+    public class ConsolidationHandler
     {
         private readonly IPodCastConverter _podCastConverter;
 
-        public BeyondPodRawDataConsolidation(IPodCastConverter podCastConverter)
+        public ConsolidationHandler(IPodCastConverter podCastConverter)
         {
             _podCastConverter = podCastConverter;
         }
 
-        [FunctionName("BeyondPodRawDataConsolidation")]
-        public async Task RunAsync([QueueTrigger("beyond-pod-raw-data", Connection= "AzureWebJobsStorage")]PodCast source, 
-                                [Table("PodCasts", Connection = "AzureWebJobsStorage")]CloudTable destination, 
-                                [Queue("new-podcast", Connection = "AzureWebJobsStorage")]ICollector<PodCast> podcastReadyToGo,
-                                ILogger log)
+        public async Task Process(Models.PodCast source,
+                                  IConsolidationRepository consolidationRepository,
+                                  INewPodCastQueue newPodCastQueue,
+                                  ILogger log)
         {
             log.LogInformation($"Processing Beyond Pod data");
 
-            var partitionKey = ToAzureKeyString(source.FeedName);
-            var rowKey = ToAzureKeyString(source.EpisodeName);
-            var retrieveOperation = TableOperation.Retrieve<Models.BeyondPod.PodCastTableEntity>(partitionKey, rowKey);
+            var existing = await consolidationRepository.Get(source.FeedName, source.EpisodeName);
 
-            log.LogInformation($"Trying to load existing podcast record");
-            var query = await destination.ExecuteAsync(retrieveOperation);
-            var isNew = (query.Result == null);
+            var isNew = (existing == null);
 
-            Models.BeyondPod.PodCastTableEntity podCast = isNew ? NewPodCast(partitionKey, rowKey, source) : UpdatePodCast((Models.BeyondPod.PodCastTableEntity)query.Result, source);
+            Models.BeyondPod.PodCastTableEntity podCast = isNew ? NewPodCast(source) : UpdatePodCast(existing, source);
 
             podCast = ApplyFixes(podCast);
 
@@ -47,18 +37,18 @@ namespace RedFolder.ActivityTracker.NewPodCasts
             }
 
             // Make sure we can save the podcast before we progress
-            await Save(destination, isNew, podCast);
+            await consolidationRepository.Save(podCast);
 
             if (shouldBeProgressed)
             {
                 var activityPodcast = _podCastConverter.Convert(podCast);
-                podcastReadyToGo.Add(activityPodcast);
+                newPodCastQueue.Add(activityPodcast);
             }
         }
 
-        public static Models.BeyondPod.PodCastTableEntity NewPodCast(String partitionKey, String rowKey, PodCast source)
+        public static Models.BeyondPod.PodCastTableEntity NewPodCast(Models.PodCast source)
         {
-            var podCast = new Models.BeyondPod.PodCastTableEntity(partitionKey, rowKey);
+            var podCast = new Models.BeyondPod.PodCastTableEntity(source.FeedName, source.EpisodeName);
 
             podCast.Created = source.Created;
             podCast.Playing = source.Playing;
@@ -79,7 +69,7 @@ namespace RedFolder.ActivityTracker.NewPodCasts
             return podCast;
         }
 
-        public static Models.BeyondPod.PodCastTableEntity UpdatePodCast(Models.BeyondPod.PodCastTableEntity podCast, PodCast source)
+        public static Models.BeyondPod.PodCastTableEntity UpdatePodCast(Models.BeyondPod.PodCastTableEntity podCast, Models.PodCast source)
         {
             if (source.Created > podCast.Created)
             {
@@ -95,20 +85,6 @@ namespace RedFolder.ActivityTracker.NewPodCasts
             }
 
             return podCast;
-        }
-
-        public static async Task Save(CloudTable destination, bool isNew, Models.BeyondPod.PodCastTableEntity podCast)
-        {
-            if (isNew)
-            {
-                var insertOperation = TableOperation.Insert(podCast);
-                await destination.ExecuteAsync(insertOperation);
-            }
-            else
-            {
-                var replaceOperation = TableOperation.Replace(podCast);
-                await destination.ExecuteAsync(replaceOperation);
-            }
         }
 
         public static Models.BeyondPod.PodCastTableEntity ApplyFixes(Models.BeyondPod.PodCastTableEntity podCast)
@@ -132,20 +108,6 @@ namespace RedFolder.ActivityTracker.NewPodCasts
             if (percentageThrough <= 0.9) return false;
 
             return true;
-        }
-
-        public static string ToAzureKeyString(string str)
-        {
-            var sb = new StringBuilder();
-            foreach (var c in str
-                .Where(c => c != '/'
-                            && c != '\\'
-                            && c != '#'
-                            && c != '/'
-                            && c != '?'
-                            && !char.IsControl(c)))
-                sb.Append(c);
-            return sb.ToString();
         }
     }
 }

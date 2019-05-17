@@ -11,6 +11,8 @@ namespace RedFolder.ActivityTracker
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddScoped<ITest, Test>();
+
+            BeyondPod.DependanceInjection.RegisterServices(builder.Services);
         }
     }
 }
