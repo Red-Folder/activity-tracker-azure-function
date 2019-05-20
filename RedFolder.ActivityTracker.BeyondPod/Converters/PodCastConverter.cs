@@ -15,12 +15,15 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters
                 new CategoryHandler("Security","SANS Internet Storm Center Daily Network Cyber Security and Information Security Podcast"),
                 new CategoryHandler("Security","Risky Business"),
                 new CategoryHandler("Security","Troy Hunt's Weekly Update Podcast"),
+                new CategoryHandler("Security","Darknet Diaries"),
 
                 new CategoryHandler("General Development","The InfoQ Podcast"),
                 new CategoryHandler("General Development","Weekly Dev Tips"),
                 new CategoryHandler("General Development","Hanselminutes"),
                 new CategoryHandler("General Development","Software Engineering Radio - The Podcast for Professional Software Developers"),
                 new CategoryHandler("General Development","Legacy Code Rocks"),
+                new CategoryHandler("General Development","The 6 Figure Developer Podcast"),
+                new CategoryHandler("General Development","Herding Code"),
 
                 new CategoryHandler("JavaScript","JavaScript Jabber"),
 
@@ -37,12 +40,15 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters
                 new CategoryHandler("Azure & AWS","AWS Podcast"),
                 new CategoryHandler("Azure & AWS","DevOps on AWS Radio"),
                 new CategoryHandler("Azure & AWS","AWS TechChat"),
+                new CategoryHandler("Azure & AWS","Azure DevOps Podcast"),
 
                 new CategoryHandler("Fun","More or Less: Behind the Stats"),
                 new CategoryHandler("Fun","Friday Night Comedy from BBC Radio 4"),
                 new CategoryHandler("Fun","In Our Time: Science"),
+                new CategoryHandler("Fun","The Infinite Monkey Cage"),
 
                 new CategoryHandler("Leadership","Engineering Culture by InfoQ"),
+                new CategoryHandler("Leadership","2000 Books for Ambitious Entrepreneurs - Author Interviews and Book Summaries"),
 
                 new CategoryHandler("Other","RunAs Radio"),
                 new CategoryHandler("Other","The Freelancers'Show"),
