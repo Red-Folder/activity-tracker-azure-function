@@ -12,10 +12,10 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters
         {
             var handlers = new List<IHandler>
             {
-                new CategoryHandler("Security","SANS Internet Storm Center Daily Network Cyber Security and Information Security Podcast"),
-                new CategoryHandler("Security","Risky Business"),
-                new CategoryHandler("Security","Troy Hunt's Weekly Update Podcast"),
-                new CategoryHandler("Security","Darknet Diaries"),
+                new SansInternetStormCenterDaily(),
+                new RiskyBusiness(),
+                new TroyHunt(),
+                new DarknetDiaries(),
 
                 new CategoryHandler("General Development","The InfoQ Podcast"),
                 new CategoryHandler("General Development","Weekly Dev Tips"),

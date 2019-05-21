@@ -22,7 +22,7 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
             _inner = inner;
         }
 
-        public Models.PodCast Convert(Models.BeyondPod.PodCastTableEntity source)
+        public virtual Models.PodCast Convert(Models.BeyondPod.PodCastTableEntity source)
         {
             if (_inner == null) return null;
 
