@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RedFolder.ActivityFolder.Models\RedFolder.ActivityFolder.Models.csproj" />
+    <ProjectReference Include="..\RedFolder.ActivityFolder.Models\RedFolder.ActivityTracker.Models.csproj" />
     <ProjectReference Include="..\RedFolder.ActivityTracker.ActivityBot\RedFolder.ActivityTracker.ActivityBot.csproj" />
   </ItemGroup>
 

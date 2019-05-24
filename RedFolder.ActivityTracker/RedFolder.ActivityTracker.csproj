@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.27" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RedFolder.ActivityFolder.Models\RedFolder.ActivityFolder.Models.csproj" />
+    <ProjectReference Include="..\RedFolder.ActivityFolder.Models\RedFolder.ActivityTracker.Models.csproj" />
     <ProjectReference Include="..\RedFolder.ActivityTracker.ActivityBot\RedFolder.ActivityTracker.ActivityBot.csproj" />
     <ProjectReference Include="..\RedFolder.ActivityTracker.BeyondPod\RedFolder.ActivityTracker.BeyondPod.csproj" />
   </ItemGroup>

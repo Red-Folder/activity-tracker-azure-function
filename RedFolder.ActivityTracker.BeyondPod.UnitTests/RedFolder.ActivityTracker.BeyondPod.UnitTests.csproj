@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RedFolder.ActivityFolder.Models\RedFolder.ActivityFolder.Models.csproj" />
+    <ProjectReference Include="..\RedFolder.ActivityFolder.Models\RedFolder.ActivityTracker.Models.csproj" />
     <ProjectReference Include="..\RedFolder.ActivityTracker.BeyondPod\RedFolder.ActivityTracker.BeyondPod.csproj" />
   </ItemGroup>
 

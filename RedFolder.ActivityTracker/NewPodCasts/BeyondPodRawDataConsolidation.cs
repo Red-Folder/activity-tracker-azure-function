@@ -20,7 +20,8 @@ namespace RedFolder.ActivityTracker.NewPodCasts
         }
 
         [FunctionName("BeyondPodRawDataConsolidation")]
-        public async Task RunAsync([QueueTrigger("beyond-pod-raw-data", Connection= "AzureWebJobsStorage")]PodCast source, 
+        public async Task RunAsync(
+                                [QueueTrigger("beyond-pod-raw-data", Connection= "AzureWebJobsStorage")]Models.BeyondPod.PodCast source, 
                                 [Table("PodCasts", Connection = "AzureWebJobsStorage")]CloudTable destination, 
                                 [Queue("new-podcast", Connection = "AzureWebJobsStorage")]ICollector<PodCast> podcastReadyToGo,
                                 ILogger log)
@@ -56,7 +57,7 @@ namespace RedFolder.ActivityTracker.NewPodCasts
             }
         }
 
-        public static Models.BeyondPod.PodCastTableEntity NewPodCast(String partitionKey, String rowKey, PodCast source)
+        public static Models.BeyondPod.PodCastTableEntity NewPodCast(String partitionKey, String rowKey, Models.BeyondPod.PodCast source)
         {
             var podCast = new Models.BeyondPod.PodCastTableEntity(partitionKey, rowKey);
 
@@ -79,7 +80,7 @@ namespace RedFolder.ActivityTracker.NewPodCasts
             return podCast;
         }
 
-        public static Models.BeyondPod.PodCastTableEntity UpdatePodCast(Models.BeyondPod.PodCastTableEntity podCast, PodCast source)
+        public static Models.BeyondPod.PodCastTableEntity UpdatePodCast(Models.BeyondPod.PodCastTableEntity podCast, Models.BeyondPod.PodCast source)
         {
             if (source.Created > podCast.Created)
             {

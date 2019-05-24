@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedFolder.ActivityTracker", "RedFolder.ActivityTracker\RedFolder.ActivityTracker.csproj", "{68CEB7CD-0D86-4198-9B3F-67F9574A1EF6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedFolder.ActivityFolder.Models", "RedFolder.ActivityFolder.Models\RedFolder.ActivityFolder.Models.csproj", "{DF1A6C58-AEE1-4EC1-8761-707369B50185}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedFolder.ActivityTracker.Models", "RedFolder.ActivityFolder.Models\RedFolder.ActivityTracker.Models.csproj", "{DF1A6C58-AEE1-4EC1-8761-707369B50185}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedFolder.ActivityTracker.ActivityBot", "RedFolder.ActivityTracker.ActivityBot\RedFolder.ActivityTracker.ActivityBot.csproj", "{7EDCB541-C559-425D-8F43-89599A49F606}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedFolder.ActivityTracker.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedFolder.ActivityTracker.BeyondPod.UnitTests", "RedFolder.ActivityTracker.BeyondPod.UnitTests\RedFolder.ActivityTracker.BeyondPod.UnitTests.csproj", "{C683E8FC-91DB-4532-8579-324A2056F1AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedFolder.ActivityTracker.IntegrationTests", "RedFolder.ActivityTracker.IntegrationTests\RedFolder.ActivityTracker.IntegrationTests.csproj", "{49CABEEB-DA93-42D3-9949-9E051959A6F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedFolder.ActivityTracker.IntegrationTests", "RedFolder.ActivityTracker.IntegrationTests\RedFolder.ActivityTracker.IntegrationTests.csproj", "{49CABEEB-DA93-42D3-9949-9E051959A6F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

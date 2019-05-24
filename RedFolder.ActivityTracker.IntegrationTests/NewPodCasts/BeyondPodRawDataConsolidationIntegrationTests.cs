@@ -116,7 +116,7 @@ namespace RedFolder.ActivityTracker.IntegrationTests.NewPodCasts
             await _cloudTable.ExecuteAsync(TableOperation.Insert(entity));
         }
 
-        private Models.PodCast StandardPodCast = new Models.PodCast
+        private Models.BeyondPod.PodCast StandardPodCast = new Models.BeyondPod.PodCast
         {
             Created = DateTime.Now,
             Playing = true,
@@ -132,8 +132,7 @@ namespace RedFolder.ActivityTracker.IntegrationTests.NewPodCasts
             EpisodePosition = 100,
             Artist = "NET Rocks",
             Album = "NET Rocks",
-            Track = ".NET Core 3 and Beyond with Scott Hunter",
-            Actioned = false
+            Track = ".NET Core 3 and Beyond with Scott Hunter"
         };
     }
 }

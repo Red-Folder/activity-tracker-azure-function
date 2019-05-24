@@ -1,9 +1,6 @@
 ﻿using Moq;
 using RedFolder.ActivityTracker.BeyondPod.Converters.Handlers;
 using RedFolder.ActivityTracker.Models.BeyondPod;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace RedFolder.ActivityTracker.BeyondPod.UnitTests.Converters.Handlers
