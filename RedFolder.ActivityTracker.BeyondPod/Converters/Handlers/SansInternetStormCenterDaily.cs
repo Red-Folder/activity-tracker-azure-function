@@ -12,13 +12,9 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
         {
         }
 
-        public override Models.PodCast Convert(PodCastTableEntity source)
+        protected override void PostConvertActions(Models.BeyondPod.PodCastTableEntity source, Models.PodCast destination)
         {
-            var result =  base.Convert(source);
-
-            result.EpisodeUrl = source.EpisodePostUrl;
-
-            return result;
+            destination.EpisodeUrl = source.EpisodePostUrl;
         }
     }
 }

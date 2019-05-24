@@ -116,9 +116,6 @@ namespace RedFolder.ActivityTracker.NewPodCasts
             // Apply fix for when duration is less than position
             if (podCast.EpisodeDuration < podCast.EpisodePosition) podCast.EpisodeDuration = podCast.EpisodePosition;
 
-            if (podCast.FeedName == "JavaScript Jabber Only") podCast.FeedName = "JavaScript Jabber";
-            if (podCast.FeedName == "Adventures in Angular Only") podCast.FeedName = "Adventures in Angular";
-
             return podCast;
         }
 

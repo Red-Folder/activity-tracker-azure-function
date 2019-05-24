@@ -17,17 +17,17 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters
                 new TroyHunt(),
                 new DarknetDiaries(),
 
-                new CategoryHandler("General Development","The InfoQ Podcast"),
-                new CategoryHandler("General Development","Weekly Dev Tips"),
-                new CategoryHandler("General Development","Hanselminutes"),
-                new CategoryHandler("General Development","Software Engineering Radio - The Podcast for Professional Software Developers"),
-                new CategoryHandler("General Development","Legacy Code Rocks"),
-                new CategoryHandler("General Development","The 6 Figure Developer Podcast"),
-                new CategoryHandler("General Development","Herding Code"),
+                new InfoQ(),
+                new WeeklyDevTips(),
+                new HanselMinutes(),
+                new SoftwareEngineeringRadio(),
+                new LegacyCodeRocks(),
+                new SixFigureDeveloper(),
+                new HerdingCode(),
 
-                new CategoryHandler("JavaScript","JavaScript Jabber"),
+                new JavaScriptJabber(),
 
-                new CategoryHandler("Angular","Adventures in Angular"),
+                new AdventuresInAngular(),
 
                 new CategoryHandler(".Net & C#","NET Rocks"),
 

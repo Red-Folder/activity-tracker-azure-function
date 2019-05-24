@@ -1,16 +1,17 @@
 ﻿namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
 {
-    public class TroyHunt : CategoryHandler
+    public class AdventuresInAngular : CategoryHandler
     {
-        private const string CATEGORY = "Security";
-        private const string FEEDNAME = "Troy Hunt's Weekly Update Podcast";
+        private const string CATEGORY = "Angular";
+        private const string FEEDNAME = "Adventures in Angular Only";
 
-        public TroyHunt() : base(CATEGORY, FEEDNAME)
+        public AdventuresInAngular() : base(CATEGORY, FEEDNAME)
         {
         }
 
         protected override void PostConvertActions(Models.BeyondPod.PodCastTableEntity source, Models.PodCast destination)
         {
+            destination.FeedName = "Adventures in Angular";
             destination.EpisodeUrl = source.EpisodePostUrl;
         }
     }

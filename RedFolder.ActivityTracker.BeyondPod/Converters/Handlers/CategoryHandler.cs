@@ -22,7 +22,7 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
             _inner = inner;
         }
 
-        public virtual Models.PodCast Convert(Models.BeyondPod.PodCastTableEntity source)
+        public Models.PodCast Convert(Models.BeyondPod.PodCastTableEntity source)
         {
             if (_inner == null) return null;
 
@@ -31,9 +31,14 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
             if (podcast.FeedName.Equals(_feedname, StringComparison.CurrentCultureIgnoreCase))
             {
                 podcast.Category = _category;
+                PostConvertActions(source, podcast);
             }
 
             return podcast;
+        }
+
+        protected virtual void PostConvertActions(Models.BeyondPod.PodCastTableEntity source, Models.PodCast destination)
+        {
         }
     }
 }

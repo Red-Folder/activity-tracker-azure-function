@@ -1,5 +1,4 @@
-﻿using RedFolder.ActivityTracker.Models.BeyondPod;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
 {
@@ -12,17 +11,13 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
         {
         }
 
-        public override Models.PodCast Convert(PodCastTableEntity source)
+        protected override void PostConvertActions(Models.BeyondPod.PodCastTableEntity source, Models.PodCast destination)
         {
-            var result = base.Convert(source);
-       
             var episodeNumber = GetEpisodeNumber(source.EpisodeName);
             if (!string.IsNullOrEmpty(episodeNumber))
             {
-                result.EpisodeUrl = $"https://darknetdiaries.com/episode/{episodeNumber}/";
+                destination.EpisodeUrl = $"https://darknetdiaries.com/episode/{episodeNumber}/";
             }
-
-            return result;
         }
 
         private string GetEpisodeNumber(string episodeName)

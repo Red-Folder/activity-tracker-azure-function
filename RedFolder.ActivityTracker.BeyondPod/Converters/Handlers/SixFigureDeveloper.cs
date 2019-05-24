@@ -1,11 +1,11 @@
 ﻿namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
 {
-    public class TroyHunt : CategoryHandler
+    public class SixFigureDeveloper : CategoryHandler
     {
-        private const string CATEGORY = "Security";
-        private const string FEEDNAME = "Troy Hunt's Weekly Update Podcast";
+        private const string CATEGORY = "General Development";
+        private const string FEEDNAME = "The 6 Figure Developer Podcast";
 
-        public TroyHunt() : base(CATEGORY, FEEDNAME)
+        public SixFigureDeveloper() : base(CATEGORY, FEEDNAME)
         {
         }
 
