@@ -8,6 +8,7 @@ namespace RedFolder.ActivityTracker.BeyondPod
         public static void RegisterServices(IServiceCollection services)
         {
             services.AddScoped<IPodCastConverter, PodCastConverter>();
+            services.AddScoped<ConsolidationHandler>();
         }
     }
 }

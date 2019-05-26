@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
+using RedFolder.ActivityTracker.BeyondPod;
 using RedFolder.ActivityTracker.BeyondPod.Converters;
 using RedFolder.ActivityTracker.IntegrationTests.Utils;
 using RedFolder.ActivityTracker.Models.BeyondPod;
@@ -16,7 +17,7 @@ namespace RedFolder.ActivityTracker.IntegrationTests.NewPodCasts
 {
     public class BeyondPodRawDataConsolidationIntegrationTests
     {
-        private readonly Mock<PodCastConverter> _podCastConverter;
+        private readonly ConsolidationHandler _handler;
         private readonly BeyondPodRawDataConsolidation _sut;
 
         private readonly string _tableName;
@@ -28,8 +29,8 @@ namespace RedFolder.ActivityTracker.IntegrationTests.NewPodCasts
 
         public BeyondPodRawDataConsolidationIntegrationTests()
         {
-            _podCastConverter = new Mock<PodCastConverter>();
-            _sut = new BeyondPodRawDataConsolidation(_podCastConverter.Object);
+            var _handler = new ConsolidationHandler(new PodCastConverter());
+            _sut = new BeyondPodRawDataConsolidation(_handler);
 
             _tableName = "test" + Guid.NewGuid().ToString().Replace("-", "");
             var cloudStorageAccount = CloudStorageAccount.Parse("UseDevelopmentStorage=true;");
@@ -79,29 +80,6 @@ namespace RedFolder.ActivityTracker.IntegrationTests.NewPodCasts
 
             Assert.Single(list);
             Assert.Equal(1000, list.First().EpisodePosition);
-        }
-
-        [Fact(Skip = "Hello")]
-        public async Task CloudTableTest()
-        {
-            try
-            {
-                var list = await GetAllCloudTableEntities();
-
-                var podCast = new PodCastTableEntity("Test", "Test2");
-                podCast.Created = DateTime.Now;
-
-                var insertOperation = TableOperation.Insert(podCast);
-                await _cloudTable.ExecuteAsync(insertOperation);
-
-                list = await GetAllCloudTableEntities();
-
-                Assert.Single(list);
-            }
-            catch (Exception ex)
-            {
-
-            }
         }
 
         private async Task<List<PodCastTableEntity>> GetAllCloudTableEntities()

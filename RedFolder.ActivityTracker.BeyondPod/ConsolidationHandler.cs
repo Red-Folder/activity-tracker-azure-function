@@ -14,7 +14,7 @@ namespace RedFolder.ActivityTracker.BeyondPod
             _podCastConverter = podCastConverter;
         }
 
-        public async Task Process(Models.PodCast source,
+        public async Task Process(Models.BeyondPod.PodCast source,
                                   IConsolidationRepository consolidationRepository,
                                   INewPodCastQueue newPodCastQueue,
                                   ILogger log)
@@ -46,7 +46,7 @@ namespace RedFolder.ActivityTracker.BeyondPod
             }
         }
 
-        public static Models.BeyondPod.PodCastTableEntity NewPodCast(Models.PodCast source)
+        public static Models.BeyondPod.PodCastTableEntity NewPodCast(Models.BeyondPod.PodCast source)
         {
             var podCast = new Models.BeyondPod.PodCastTableEntity(source.FeedName, source.EpisodeName);
 
@@ -69,7 +69,7 @@ namespace RedFolder.ActivityTracker.BeyondPod
             return podCast;
         }
 
-        public static Models.BeyondPod.PodCastTableEntity UpdatePodCast(Models.BeyondPod.PodCastTableEntity podCast, Models.PodCast source)
+        public static Models.BeyondPod.PodCastTableEntity UpdatePodCast(Models.BeyondPod.PodCastTableEntity podCast, Models.BeyondPod.PodCast source)
         {
             if (source.Created > podCast.Created)
             {
@@ -91,10 +91,6 @@ namespace RedFolder.ActivityTracker.BeyondPod
         {
             // Apply fix for when duration is less than position
             if (podCast.EpisodeDuration < podCast.EpisodePosition) podCast.EpisodeDuration = podCast.EpisodePosition;
-
-            if (podCast.FeedName == "JavaScript Jabber Only") podCast.FeedName = "JavaScript Jabber";
-            if (podCast.FeedName == "Adventures in Angular Only") podCast.FeedName = "Adventures in Angular";
-
             return podCast;
         }
 
