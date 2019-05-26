@@ -40,21 +40,12 @@ namespace RedFolder.ActivityTracker.BeyondPod.UnitTests.Converters.Handlers
             var result = _sut.Convert(source);
 
             Assert.Equal(source.Created, result.Created);
-            Assert.Equal(source.Playing, result.Playing);
             Assert.Equal(source.FeedName, result.FeedName);
             Assert.Equal(source.FeedUrl, result.FeedUrl);
             Assert.Equal(source.EpisodeName, result.EpisodeName);
             Assert.Equal(source.EpisodeUrl, result.EpisodeUrl);
-            Assert.Equal(source.EpisodeFile, result.EpisodeFile);
-            Assert.Equal(source.EpisodePostUrl, result.EpisodePostUrl);
-            Assert.Equal(source.EpisodeMime, result.EpisodeMime);
             Assert.Equal(source.EpisodeSummary, result.EpisodeSummary);
             Assert.Equal(source.EpisodeDuration, result.EpisodeDuration);
-            Assert.Equal(source.EpisodePosition, result.EpisodePosition);
-            Assert.Equal(source.Artist, result.Artist);
-            Assert.Equal(source.Album, result.Album);
-            Assert.Equal(source.Track, result.Track);
-            Assert.Equal(source.Actioned, result.Actioned);
             Assert.Equal("", result.Category);
         }
     }
