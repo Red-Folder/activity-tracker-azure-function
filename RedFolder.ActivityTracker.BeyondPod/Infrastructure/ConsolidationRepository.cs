@@ -32,8 +32,10 @@ namespace RedFolder.ActivityTracker.BeyondPod.Infrastructure
             entity.PartitionKey = ToAzureKeyString(entity.PartitionKey);
             entity.RowKey = ToAzureKeyString(entity.RowKey);
 
-            var insertOperation = TableOperation.InsertOrReplace(entity);
-            await _table.ExecuteAsync(insertOperation);
+            var isNew = string.IsNullOrEmpty(entity.ETag);
+
+            var operation = isNew ? TableOperation.Insert(entity) : TableOperation.Replace(entity);
+            await _table.ExecuteAsync(operation);
         }
 
         private static string ToAzureKeyString(string str)
