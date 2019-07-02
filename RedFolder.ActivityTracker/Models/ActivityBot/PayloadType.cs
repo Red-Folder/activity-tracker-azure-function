@@ -2,6 +2,7 @@
 {
     public enum PayloadType
     {
-        NewPodCast
+        NewPodCast,
+        WeekylActivity
     }
 }

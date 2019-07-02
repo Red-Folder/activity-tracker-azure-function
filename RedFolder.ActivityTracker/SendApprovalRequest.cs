@@ -6,7 +6,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using RedFolder.ActivityTracker.Models;
+using RedFolder.ActivityTracker.Models.ActivityBot;
 using RedFolder.ActivityTracker.Models.Notifications;
+using RedFolder.ActivityTracker.Services;
 
 namespace RedFolder.ActivityTracker
 {
@@ -41,6 +43,18 @@ namespace RedFolder.ActivityTracker
                 }
             };
             await hub.SendFcmNativeNotificationAsync(JsonConvert.SerializeObject(notification));
+
+            // And also alert on Slack
+            var payload = new Payload
+            {
+                Type = PayloadType.WeekylActivity,
+                Contents = approval
+            };
+
+            var secret = Environment.GetEnvironmentVariable("ActivityBotSecret", EnvironmentVariableTarget.Process);
+
+            var client = new ActivityBotProxy(secret);
+            client.Broadcast(payload).Wait();
         }
     }
 }
