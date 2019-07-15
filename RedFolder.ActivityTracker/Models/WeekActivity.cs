@@ -67,6 +67,9 @@ namespace RedFolder.ActivityTracker.Models
         [JsonProperty("events")]
         public EventActivity Events { get; set; }
 
+        [JsonProperty("books")]
+        public BookActivity Books { get; set; }
+
         public void AddPodCast(PodCast podCast)
         {
             if (PodCasts == null) PodCasts = new PodCastActivity();
