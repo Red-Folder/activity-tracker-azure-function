@@ -76,5 +76,12 @@ namespace RedFolder.ActivityTracker.Models
 
             PodCasts.Add(podCast);
         }
+
+        public void AddBook(Book book)
+        {
+            if (Books == null) Books = new BookActivity();
+
+            Books.Add(book);
+        }
     }
 }
