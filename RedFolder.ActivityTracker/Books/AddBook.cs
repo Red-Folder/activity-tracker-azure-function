@@ -6,9 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using RedFolder.ActivityTracker.Services;
-using System;
-using Microsoft.WindowsAzure.Storage.Blob;
+using RedFolder.ActivityTracker.Utilities;
 
 namespace RedFolder.ActivityTracker.Books
 {
@@ -36,36 +34,11 @@ namespace RedFolder.ActivityTracker.Books
             if (string.IsNullOrEmpty(book.Author)) return new BadRequestObjectResult("Please provide book author");
             if (string.IsNullOrEmpty(book.ImageUrl)) return new BadRequestObjectResult("Please provide book image url");
 
-            int year;
-            int weekNumber;
+            var week = Models.Week.FromYearAndWeekNumber(data?.year, data?.weekNumber);
 
-            if (!int.TryParse(data?.year, out year)) return new BadRequestObjectResult("Please provide valid year");
-            if (!int.TryParse(data?.weekNumber, out weekNumber)) return new BadRequestObjectResult("Please provide valid weekNumber");
+            var repository = new WeeklyActivityRepository(week, binder, log);
 
-            var week = Models.Week.FromYearAndWeekNumber(year, weekNumber);
-
-            var blobName = $"activity-weekly/{week.Year.ToString("0000")}/{week.WeekNumber.ToString("00")}.json";
-
-            log.LogInformation($"To save to {blobName}");
-
-            var attributes = new Attribute[]
-            {
-                new BlobAttribute(blobName),
-                new StorageAccountAttribute("AzureWebJobsStorage")
-            };
-
-            var blob = await binder.BindAsync<CloudBlockBlob>(attributes);
-
-            using (var locker = new CloudBlockBlobLocker<Models.WeekActivity>(blob))
-            {
-                var activity = locker.IsNew ?
-                                new Models.WeekActivity(week.Year, week.WeekNumber) :
-                                await locker.Download();
-
-                activity.AddBook(book);
-
-                await locker.Upload(activity);
-            }
+            await repository.Update(x => x.AddBook(book));
 
             return new StatusCodeResult(201);
         }
