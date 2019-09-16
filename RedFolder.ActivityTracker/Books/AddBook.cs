@@ -20,40 +20,40 @@ namespace RedFolder.ActivityTracker.Books
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var data = JsonConvert.DeserializeObject<Model>(requestBody);
+
+            if (data.Year == default(int)) return new BadRequestObjectResult("Please provide year");
+            if (data.WeekNumber == default(int)) return new BadRequestObjectResult("Please provide year");
+
+            if (string.IsNullOrEmpty(data.Title)) return new BadRequestObjectResult("Please provide book title");
+            if (string.IsNullOrEmpty(data.Description)) return new BadRequestObjectResult("Please provide book description");
+            if (string.IsNullOrEmpty(data.Author)) return new BadRequestObjectResult("Please provide book author");
+            if (string.IsNullOrEmpty(data.ImageUrl)) return new BadRequestObjectResult("Please provide book image url");
 
             var book = new Models.Book();
-            book.Title = data?.title;
-            book.Description = data?.description;
-            book.Author = data?.author;
-            book.ImageUrl = data?.imageUrl;
+            book.Title = data.Title;
+            book.Description = data.Description;
+            book.Author = data.Author;
+            book.ImageUrl = data.ImageUrl;
 
-            if (string.IsNullOrEmpty(book.Title)) return new BadRequestObjectResult("Please provide book title");
-            if (string.IsNullOrEmpty(book.Description)) return new BadRequestObjectResult("Please provide book description");
-            if (string.IsNullOrEmpty(book.Author)) return new BadRequestObjectResult("Please provide book author");
-            if (string.IsNullOrEmpty(book.ImageUrl)) return new BadRequestObjectResult("Please provide book image url");
-
-            var yearString = data?.year as string;
-            var weekNumberString = data?.weekNumber as string;
-
-            if (!int.TryParse(yearString, out int year))
-            {
-                return new BadRequestObjectResult("Please provide year");
-            }
-
-            if (!int.TryParse(weekNumberString, out int weekNumber))
-            {
-                return new BadRequestObjectResult("Please provide year");
-            }
-
-            var week = Models.Week.FromYearAndWeekNumber(year, weekNumber);
+            var week = Models.Week.FromYearAndWeekNumber(data.Year, data.WeekNumber);
 
             var repository = new WeeklyActivityRepository(week, binder, log);
 
             await repository.Update(x => x.AddBook(book));
 
             return new StatusCodeResult(201);
+        }
+
+        public class Model
+        {
+            public int Year { get; set; }
+            public int WeekNumber { get; set; }
+            public string Title { get; set; }
+            public string Description { get; set; }
+            public string Author { get; set; }
+            public string ImageUrl { get; set; }
         }
     }
 }
