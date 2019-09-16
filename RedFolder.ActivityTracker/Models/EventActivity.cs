@@ -7,5 +7,12 @@ namespace RedFolder.ActivityTracker.Models
     {
         [JsonProperty("events")]
         public List<Event> Events;
+
+        public void Add(Event newEvent)
+        {
+            if (Events == null) Events = new List<Event>();
+
+            Events.Add(newEvent);
+        }
     }
 }

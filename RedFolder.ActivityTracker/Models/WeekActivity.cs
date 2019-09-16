@@ -83,5 +83,12 @@ namespace RedFolder.ActivityTracker.Models
 
             Books.Add(book);
         }
+
+        public void AddEvent(Event newEvent)
+        {
+            if (Events == null) Events = new EventActivity();
+
+            Events.Add(newEvent);
+        }
     }
 }
