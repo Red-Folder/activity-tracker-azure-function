@@ -34,11 +34,18 @@ namespace RedFolder.ActivityTracker.Books
             if (string.IsNullOrEmpty(book.Author)) return new BadRequestObjectResult("Please provide book author");
             if (string.IsNullOrEmpty(book.ImageUrl)) return new BadRequestObjectResult("Please provide book image url");
 
-            if (data?.year as int? == null) return new BadRequestObjectResult("Please provide year");
-            if (data?.weekNumber as int? == null) return new BadRequestObjectResult("Please provide weekNumber");
+            var yearString = data?.year as string;
+            var weekNumberString = data?.weekNumber as string;
 
-            int year = data?.year ?? default(int);
-            int weekNumber = data?.weekNumber ?? default(int);
+            if (!int.TryParse(yearString, out int year))
+            {
+                return new BadRequestObjectResult("Please provide year");
+            }
+
+            if (!int.TryParse(weekNumberString, out int weekNumber))
+            {
+                return new BadRequestObjectResult("Please provide year");
+            }
 
             var week = Models.Week.FromYearAndWeekNumber(year, weekNumber);
 
