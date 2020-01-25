@@ -1,11 +1,11 @@
 ﻿namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
 {
-    public class FreelancerShow : CategoryHandler
+    public class BrainScience : CategoryHandler
     {
         private const string CATEGORY = "Leadership";
-        private const string FEEDNAME = "The Freelancers' Show";
+        private const string FEEDNAME = "Brain Science";
 
-        public FreelancerShow() : base(CATEGORY, FEEDNAME)
+        public BrainScience() : base(CATEGORY, FEEDNAME)
         {
         }
 

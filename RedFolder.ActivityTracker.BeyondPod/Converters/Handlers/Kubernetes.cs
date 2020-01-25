@@ -1,11 +1,11 @@
 ﻿namespace RedFolder.ActivityTracker.BeyondPod.Converters.Handlers
 {
-    public class FreelancerShow : CategoryHandler
+    public class Kubernetes : CategoryHandler
     {
-        private const string CATEGORY = "Leadership";
-        private const string FEEDNAME = "The Freelancers' Show";
+        private const string CATEGORY = "DevOps";
+        private const string FEEDNAME = "Kubernetes Podcast from Google";
 
-        public FreelancerShow() : base(CATEGORY, FEEDNAME)
+        public Kubernetes() : base(CATEGORY, FEEDNAME)
         {
         }
 

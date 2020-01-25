@@ -4,22 +4,22 @@ using Xunit;
 
 namespace RedFolder.ActivityTracker.BeyondPod.UnitTests.Converters.Handlers
 {
-    public class RunAsRadioUnitTests
+    public class AdventuresInDevOpsUnitTests
     {
-        private readonly RunAsRadio _sut;
+        private readonly AdventuresInDevOps _sut;
 
         private readonly PodCastTableEntity _sample;
 
-        public RunAsRadioUnitTests()
+        public AdventuresInDevOpsUnitTests()
         {
-            _sut = new RunAsRadio();
+            _sut = new AdventuresInDevOps();
             _sut.AddInner(new BaseHandler());
             _sample = new PodCastTableEntity
             {
-                FeedName = "RunAs Radio",
-                EpisodeName = "Using Query Store to Help Developers Understand Query Performance with Erin Stellato",
-                EpisodeUrl = "http://www.podtrac.com/pts/redirect.mp3/s3.amazonaws.com/runas/runasradio_0632_query_store.mp3",
-                EpisodePostUrl = "http://feedproxy.google.com/~r/RunasRadio/~3/5gqNMw2W2zU/default.aspx"
+                FeedName = "Adventures in DevOps",
+                EpisodeName = "DevOps 12: Containerizing an Application",
+                EpisodeUrl = "https://media.devchat.tv/adventures-in-devops/ADO_012_Panel.mp3",
+                EpisodePostUrl = "https://devchat.tv/adventures-in-devops/devops-12-containerizing-an-application"
             };
         }
 
@@ -36,7 +36,7 @@ namespace RedFolder.ActivityTracker.BeyondPod.UnitTests.Converters.Handlers
         {
             var result = _sut.Convert(_sample);
 
-            Assert.Equal("http://feedproxy.google.com/~r/RunasRadio/~3/5gqNMw2W2zU/default.aspx", result.EpisodeUrl);
+            Assert.Equal("https://devchat.tv/adventures-in-devops/devops-12-containerizing-an-application", result.EpisodeUrl);
         }
     }
 }

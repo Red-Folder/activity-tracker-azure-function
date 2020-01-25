@@ -2,7 +2,7 @@
 {
     public class RunAsRadio : CategoryHandler
     {
-        private const string CATEGORY = "Other";
+        private const string CATEGORY = "DevOps";
         private const string FEEDNAME = "RunAs Radio";
 
         public RunAsRadio() : base(CATEGORY, FEEDNAME)

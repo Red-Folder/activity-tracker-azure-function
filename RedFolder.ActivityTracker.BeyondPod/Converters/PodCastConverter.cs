@@ -50,9 +50,12 @@ namespace RedFolder.ActivityTracker.BeyondPod.Converters
                 new InfoQCulture(),
                 new TwoThousandBooks(),
                 new BetterROI(),
+                new FreelancerShow(),
+                new BrainScience(),
 
                 new RunAsRadio(),
-                new FreelancerShow(),
+                new AdventuresInDevOps(),
+                new Kubernetes(),
 
                 new DefaultCategoryHandler(),
 

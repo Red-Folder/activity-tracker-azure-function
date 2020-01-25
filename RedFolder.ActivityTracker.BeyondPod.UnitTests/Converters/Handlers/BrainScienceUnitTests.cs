@@ -4,22 +4,22 @@ using Xunit;
 
 namespace RedFolder.ActivityTracker.BeyondPod.UnitTests.Converters.Handlers
 {
-    public class FreelancerShowUnitTests
+    public class BrainScienceUnitTests
     {
-        private readonly FreelancerShow _sut;
+        private readonly BrainScience _sut;
 
         private readonly PodCastTableEntity _sample;
 
-        public FreelancerShowUnitTests()
+        public BrainScienceUnitTests()
         {
-            _sut = new FreelancerShow();
+            _sut = new BrainScience();
             _sut.AddInner(new BaseHandler());
             _sample = new PodCastTableEntity
             {
-                FeedName = "The Freelancers' Show",
-                EpisodeName = "TFS 331: Using a CRM",
-                EpisodeUrl = "http://www.podtrac.com/pts/redirect.mp3/media.devchat.tv/freelancers/TFS_331_Using_a_CRM.mp3",
-                EpisodePostUrl = " https://devchat.tv/freelancers/tfs-331-using-a-crm/"
+                FeedName = "Brain Science",
+                EpisodeName = "What are you thinking?",
+                EpisodeUrl = "https://cdn.changelog.com/uploads/brainscience/7/brain-science-7.mp3",
+                EpisodePostUrl = "https://changelog.com/brainscience/7"
             };
         }
 
@@ -36,7 +36,7 @@ namespace RedFolder.ActivityTracker.BeyondPod.UnitTests.Converters.Handlers
         {
             var result = _sut.Convert(_sample);
 
-            Assert.Equal(" https://devchat.tv/freelancers/tfs-331-using-a-crm/", result.EpisodeUrl);
+            Assert.Equal("https://changelog.com/brainscience/7", result.EpisodeUrl);
         }
     }
 }
