@@ -18,10 +18,11 @@ namespace RedFolder.ActivityTracker.NewPodCasts
         {
             var podCastAge = (DateTime.Now - newPodCast.Created).TotalHours;
 
-            if (podCastAge < 3)
-            {
-                toBeTweeted.Add(newPodCast);
-            }
+            // Disable tweeting of Podcast listens
+            //if (podCastAge < 3)
+            //{
+            //    toBeTweeted.Add(newPodCast);
+            //}
 
             toBeAddedToWeeklyActivity.Add(newPodCast);
 
