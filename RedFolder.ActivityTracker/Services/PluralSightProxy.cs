@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RedFolder.ActivityTracker.Services
@@ -34,11 +33,11 @@ namespace RedFolder.ActivityTracker.Services
         {
             foreach (var course in courses)
             {
-                if (!_courseContent.Any(x => x.Id == course.CourseId))
+                if (!_courseContent.Any(x => x.Id == course.Id))
                 {
                     try
                     {
-                        _courseContent.Add(await GetCourseContents(client, course.CourseId));
+                        _courseContent.Add(await GetCourseContents(client, course.Id));
                     }
                     catch (Exception)
                     {
