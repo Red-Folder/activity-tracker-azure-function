@@ -53,7 +53,7 @@ namespace RedFolder.ActivityTracker.Services
             var combinedCourses = new List<Course>();
             combinedCourses.AddRange(_completed.Select(raw =>
             {
-                var content = _courseContent.Where(x => x.Id == raw.CourseId).FirstOrDefault();
+                var content = _courseContent.Where(x => x.CourseId == raw.CourseId).FirstOrDefault();
                 return new Course
                 {
                     CourseId = raw.CourseId,
@@ -67,7 +67,7 @@ namespace RedFolder.ActivityTracker.Services
             }).ToList());
             combinedCourses.AddRange(_currentlyLearning.Select(raw =>
             {
-                var content = _courseContent.Where(x => x.Id == raw.CourseId).FirstOrDefault();
+                var content = _courseContent.Where(x => x.CourseId == raw.CourseId).FirstOrDefault();
                 return new Course
                 {
                     CourseId = raw.CourseId,
