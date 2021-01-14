@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage.Table;
+using Microsoft.Azure.Cosmos.Table;
 using RedFolder.ActivityTracker.Models.BeyondPod;
 
 namespace RedFolder.ActivityTracker.BeyondPod.Infrastructure

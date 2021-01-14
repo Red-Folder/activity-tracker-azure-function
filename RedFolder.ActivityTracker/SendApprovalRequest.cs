@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using RedFolder.ActivityTracker.Models;
 using RedFolder.ActivityTracker.Models.ActivityBot;

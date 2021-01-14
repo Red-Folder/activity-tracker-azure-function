@@ -1,7 +1,5 @@
-﻿using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.Azure.Cosmos.Table;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RedFolder.ActivityTracker.Models
 {

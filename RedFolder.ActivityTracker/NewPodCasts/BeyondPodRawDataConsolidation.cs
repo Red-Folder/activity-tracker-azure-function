@@ -1,6 +1,6 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using Microsoft.Azure.Cosmos.Table;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Table;
 using RedFolder.ActivityTracker.BeyondPod;
 using RedFolder.ActivityTracker.BeyondPod.Infrastructure;
 using RedFolder.ActivityTracker.Models;

@@ -5,8 +5,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using Microsoft.WindowsAzure.Storage.Table;
 using RedFolder.ActivityTracker.Models;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace RedFolder.ActivityTracker
 {

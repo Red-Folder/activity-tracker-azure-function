@@ -1,5 +1,4 @@
-﻿using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.Azure.Cosmos.Table;
 using RedFolder.ActivityTracker.BeyondPod.Infrastructure;
 using RedFolder.ActivityTracker.IntegrationTests.Utils;
 using System;

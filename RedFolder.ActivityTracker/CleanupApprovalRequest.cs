@@ -1,6 +1,6 @@
-﻿using Microsoft.Azure.WebJobs;
+﻿using Microsoft.Azure.Cosmos.Table;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Table;
 using RedFolder.ActivityTracker.Models;
 using System;
 using System.Threading.Tasks;
