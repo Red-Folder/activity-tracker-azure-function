@@ -4,13 +4,14 @@ using Microsoft.Extensions.Logging;
 using System;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System.Threading.Tasks;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 
 namespace RedFolder.ActivityTracker
 {
     public static class WriteActivityImage
     {
         [FunctionName("WriteActivityImage")]
-        public async static Task<string> Run([ActivityTrigger]  DurableActivityContext context, Binder binder, ILogger log)
+        public async static Task<string> Run([ActivityTrigger]  IDurableActivityContext context, Binder binder, ILogger log)
         {
             var activityImage = context.GetInput<ActivityImage>();
             var week = activityImage.Week;

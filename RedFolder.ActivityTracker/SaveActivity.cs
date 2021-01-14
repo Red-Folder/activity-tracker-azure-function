@@ -4,13 +4,14 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage.Blob;
 using RedFolder.ActivityTracker.Services;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 
 namespace RedFolder.ActivityTracker
 {
     public static class SaveActivity
     {
         [FunctionName("SaveActivity")]
-        public async static Task Run([ActivityTrigger] DurableActivityContext context, Binder binder, ILogger log)
+        public async static Task Run([ActivityTrigger] IDurableActivityContext context, Binder binder, ILogger log)
         {
             var activityToSave = context.GetInput<Models.WeekActivity>();
 

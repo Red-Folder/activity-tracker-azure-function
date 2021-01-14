@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 using RedFolder.ActivityTracker.Models;
 using RedFolder.ActivityTracker.Services;
@@ -10,7 +11,7 @@ namespace RedFolder.ActivityTracker
     public static class RetrieveBlogActivity
     {
         [FunctionName("RetrieveBlogActivity")]
-        public static async Task<BlogActivity> RunAsync([ActivityTrigger] DurableActivityContext context, ILogger log)
+        public static async Task<BlogActivity> RunAsync([ActivityTrigger] IDurableActivityContext context, ILogger log)
         {
             var week = context.GetInput<Week>();
 

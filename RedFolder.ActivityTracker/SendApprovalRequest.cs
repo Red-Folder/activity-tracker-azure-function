@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.NotificationHubs;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RedFolder.ActivityTracker.Models;
@@ -15,7 +16,7 @@ namespace RedFolder.ActivityTracker
     public static class SendApprovalRequest
     {
         [FunctionName("SendApprovalRequest")]
-        public static async Task Run([ActivityTrigger] DurableActivityContext context,
+        public static async Task Run([ActivityTrigger] IDurableActivityContext context,
             [Table("PendingApprovals", Connection = "AzureWebJobsStorage")]CloudTable destination,
             ILogger log)
         {

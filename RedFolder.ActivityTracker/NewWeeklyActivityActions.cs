@@ -1,4 +1,5 @@
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Azure.WebJobs.Host;
 using RedFolder.ActivityTracker.Models;
 
@@ -8,7 +9,7 @@ namespace RedFolder.ActivityTracker
     {
         [FunctionName("NewWeeklyActivityActions")]
         public static void Run(
-            [ActivityTrigger] DurableActivityContext context,
+            [ActivityTrigger] IDurableActivityContext context,
             [Queue("activity-to-be-tweeted", Connection = "AzureWebJobsStorage")]ICollector<WeeklyActivityToBeTweeted> toBeTweeted,
             TraceWriter log)
         {

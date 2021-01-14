@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 using RedFolder.ActivityTracker.Models;
 
@@ -12,9 +13,9 @@ namespace RedFolder.ActivityTracker
         private const string APPROVAL_EVENT = "Approval";
 
         [FunctionName("OrchestrateWeeklyActivity")]
-        public async static Task Run([OrchestrationTrigger] DurableOrchestrationContext context, ILogger log)
+        public async static Task Run([OrchestrationTrigger] IDurableOrchestrationContext context, ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            log.LogInformation($"C# Timer trigger function executed at: {context.CurrentUtcDateTime}");
 
             var instruction = context.GetInput<OrchestrationInstruction>();
 
@@ -85,12 +86,12 @@ namespace RedFolder.ActivityTracker
             log.LogInformation($"Run complete");
         }
 
-        public static async Task<Week> GetWeek(DurableOrchestrationContext context)
+        public static async Task<Week> GetWeek(IDurableOrchestrationContext context)
         {
             return await context.CallActivityAsync<Week>("GetWeek", null);
         }
 
-        private static async Task RetrieveActivity(DurableOrchestrationContext context, Week week)
+        private static async Task RetrieveActivity(IDurableOrchestrationContext context, Week week)
         {
             var activityToSave = new Models.WeekActivity(week.Year, week.WeekNumber);
 
@@ -109,7 +110,7 @@ namespace RedFolder.ActivityTracker
             await context.CallActivityAsync("SaveActivity", activityToSave);
         }
 
-        private static async Task<string> ScreenCapture(DurableOrchestrationContext context, Week week)
+        private static async Task<string> ScreenCapture(IDurableOrchestrationContext context, Week week)
         {
             var imageData = await context.CallActivityAsync<byte[]>("CaptureActivityImage", week);
 

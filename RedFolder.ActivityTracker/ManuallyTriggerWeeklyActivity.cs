@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RedFolder.ActivityTracker.Models;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 
 namespace RedFolder.ActivityTracker
 {
@@ -14,7 +15,7 @@ namespace RedFolder.ActivityTracker
         [FunctionName("ManuallyTriggerWeeklyActivity")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-            [OrchestrationClient] DurableOrchestrationClient starter,
+            [DurableClientAttribute] IDurableOrchestrationClient starter,
             ILogger log)
         {
             var json = await req.ReadAsStringAsync();

@@ -1,4 +1,5 @@
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 using RedFolder.ActivityTracker.Models;
 using System;
@@ -10,7 +11,7 @@ namespace RedFolder.ActivityTracker
     public static class CaptureActivityImage
     {
         [FunctionName("CaptureActivityImage")]
-        public async static Task<byte[]> Run([ActivityTrigger] DurableActivityContext context, ILogger log)
+        public async static Task<byte[]> Run([ActivityTrigger] IDurableActivityContext context, ILogger log)
         {
             var week = context.GetInput<Week>();
             log.LogInformation($"Running Capture Activity Image for week #{week.WeekNumber}");

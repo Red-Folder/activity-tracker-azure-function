@@ -6,6 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 
 namespace RedFolder.ActivityTracker
 {
@@ -14,7 +15,7 @@ namespace RedFolder.ActivityTracker
         [FunctionName("Approve")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-            [OrchestrationClient] DurableOrchestrationClient client,
+            [DurableClientAttribute] IDurableOrchestrationClient client,
             ILogger log)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();

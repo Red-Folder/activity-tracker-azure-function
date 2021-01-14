@@ -1,4 +1,5 @@
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 using RedFolder.ActivityTracker.Models;
 using System;
@@ -8,7 +9,7 @@ namespace RedFolder.ActivityTracker
     public static class GetWeek
     {
         [FunctionName("GetWeek")]
-        public static Week Run([ActivityTrigger] DurableActivityContext context, ILogger log)
+        public static Week Run([ActivityTrigger] IDurableActivityContext context, ILogger log)
         {
             log.LogInformation("Getting the week to work on.");
 

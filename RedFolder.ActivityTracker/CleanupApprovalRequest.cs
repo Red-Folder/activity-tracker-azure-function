@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 using Microsoft.Extensions.Logging;
 using RedFolder.ActivityTracker.Models;
 using System;
@@ -10,7 +11,7 @@ namespace RedFolder.ActivityTracker
     public class CleanupApprovalRequest
     {
         [FunctionName("CleanupApprovalRequest")]
-        public static async Task RunAsync([ActivityTrigger] DurableActivityContext context,
+        public static async Task RunAsync([ActivityTrigger] IDurableActivityContext context,
             [Table("PendingApprovals", Connection = "AzureWebJobsStorage")]CloudTable destination,
             ILogger log)
         {
