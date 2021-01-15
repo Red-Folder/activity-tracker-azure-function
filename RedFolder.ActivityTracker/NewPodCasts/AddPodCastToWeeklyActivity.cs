@@ -2,8 +2,8 @@
 using RedFolder.ActivityTracker.Models;
 using System;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
 using RedFolder.ActivityTracker.Services;
+using Microsoft.Azure.Storage.Blob;
 
 namespace RedFolder.ActivityTracker.NewPodCasts
 {

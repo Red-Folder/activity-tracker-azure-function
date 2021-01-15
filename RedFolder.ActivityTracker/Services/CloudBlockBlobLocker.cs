@@ -1,9 +1,7 @@
-﻿using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+﻿using Microsoft.Azure.Storage;
+using Microsoft.Azure.Storage.Blob;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RedFolder.ActivityTracker.Services

@@ -2,9 +2,9 @@ using Microsoft.Azure.WebJobs;
 using RedFolder.ActivityTracker.Models;
 using Microsoft.Extensions.Logging;
 using System;
-using Microsoft.WindowsAzure.Storage.Blob;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
+using Microsoft.Azure.Storage.Blob;
 
 namespace RedFolder.ActivityTracker
 {
