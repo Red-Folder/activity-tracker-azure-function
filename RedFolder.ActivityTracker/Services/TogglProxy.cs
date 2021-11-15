@@ -90,7 +90,7 @@ namespace RedFolder.ActivityTracker.Services
         private string BuildUrl(string workspaceId, DateTime from, DateTime to)
         {
             var builder = new StringBuilder();
-            builder.Append("https://toggl.com/reports/api/v2/details?");
+            builder.Append("https://api.track.toggl.com/reports/api/v2/details?");
             builder.Append($"workspace_id={workspaceId}");
             builder.Append($"&since={from.ToString("yyyy-MM-dd")}");
             builder.Append($"&until={to.ToString("yyyy-MM-dd")}");
